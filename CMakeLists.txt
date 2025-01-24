@@ -48,10 +48,15 @@ file(GLOB_RECURSE GODOTLIGHTER_HEADERS
 	"./src/*.h"
 )
 
-
-############################
-### Define Version #########
-############################
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+    set(GODOTLIGHTER_PLATFORM linux)
+elseif(CMAKE_SYSTEM_NAME STREQUAL "Windows")
+    set(GODOTLIGHTER_PLATFORM windows)
+elseif(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
+    set(GODOTLIGHTER_PLATFORM macos)
+else()
+    message(FATAL_ERROR "Unsupported platform: ${CMAKE_SYSTEM_NAME}")
+endif()
 
 set(GODOTLIGHTER_VERSION_MAJOR 1)
 set(GODOTLIGHTER_VERSION_MINOR 0)
@@ -59,9 +64,22 @@ set(GODOTLIGHTER_VERSION_PATCH 0)
 
 set(GODOTLIGHTER_VERSION "${GODOTLIGHTER_VERSION_MAJOR}.${GODOTLIGHTER_VERSION_MINOR}.${GODOTLIGHTER_VERSION_PATCH}")
 
+set(GODOTLIGHTER_GODOT_VERSION "4.3")
+
+
+############################
+### Define Version #########
+############################
+
 configure_file(
 	"${CMAKE_CURRENT_SOURCE_DIR}/src/godotlighter_version.h.in"
 	"${GODOTLIGHTER_BIN}/godotlighter_version.h"
+	@ONLY
+)
+
+configure_file(
+	"${CMAKE_CURRENT_SOURCE_DIR}/src/godotlighter.gdextension"
+	"${GODOTLIGHTER_BIN}/godotlighter.gdextension"
 	@ONLY
 )
 
@@ -69,6 +87,13 @@ configure_file(
 ############################
 ### Targets		 ###########
 ############################
+
+add_custom_target(godotlighter_build_godot_cpp
+    COMMAND scons platform=${GODOTLIGHTER_PLATFORM}
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/godot-cpp
+    COMMENT "Building Godot C++ bindings for ${PLATFORM} using SCons"
+)
+
 
 add_library(godotlighter SHARED ${GODOTLIGHTER_SOURCE})
 
@@ -79,5 +104,11 @@ set_target_properties(godotlighter PROPERTIES
 	RUNTIME_OUTPUT_DIRECTORY "${GODOTLIGHTER_BIN}")
 
 target_include_directories(godotlighter PRIVATE ${GODOTLIGHTER_BIN})
+target_include_directories(godotlighter PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/godot-cpp/gen/include/")
+target_include_directories(godotlighter PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/godot-cpp/include/")
+target_include_directories(godotlighter PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/godot-cpp/gdextension/")
 
 target_link_libraries(godotlighter PRIVATE sqlighter)
+
+# Optimize this part:
+# add_dependencies(godotlighter godotlighter_build_godot_cpp)
