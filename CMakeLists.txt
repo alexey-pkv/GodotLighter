@@ -11,6 +11,29 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 
+############################
+### Includes ###############
+############################
+
+include(FetchContent)
+
+
+#####################################
+### Include SQLighter ###############
+#####################################
+
+FetchContent_Declare(
+	sqlighter
+	GIT_REPOSITORY	https://github.com/alexey-pkv/sqlighter.git
+	GIT_TAG			v1.0.0
+)
+
+set(SQLIGHTER_BUILD_STATIC_LIBS ON)
+
+FetchContent_MakeAvailable(sqlighter)
+set_target_properties(sqlighter PROPERTIES POSITION_INDEPENDENT_CODE ON)
+
+
 #############################
 ### Variables ###############
 #############################
@@ -37,19 +60,9 @@ set(GODOTLIGHTER_VERSION_PATCH 0)
 set(GODOTLIGHTER_VERSION "${GODOTLIGHTER_VERSION_MAJOR}.${GODOTLIGHTER_VERSION_MINOR}.${GODOTLIGHTER_VERSION_PATCH}")
 
 configure_file(
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/godotlighter_version.h.in"
-    "${GODOTLIGHTER_BIN}/godotlighter_version.h"
-    @ONLY
-)
-
-
-############################
-### Clean 	 ###############
-############################
-
-add_custom_target(purge
-    COMMAND ${CMAKE_COMMAND} -E rm -rf ${CMAKE_BINARY_DIR}
-    COMMENT "Cleaning the build directory"
+	"${CMAKE_CURRENT_SOURCE_DIR}/src/godotlighter_version.h.in"
+	"${GODOTLIGHTER_BIN}/godotlighter_version.h"
+	@ONLY
 )
 
 
@@ -66,3 +79,5 @@ set_target_properties(godotlighter PROPERTIES
 	RUNTIME_OUTPUT_DIRECTORY "${GODOTLIGHTER_BIN}")
 
 target_include_directories(godotlighter PRIVATE ${GODOTLIGHTER_BIN})
+
+target_link_libraries(godotlighter PRIVATE sqlighter)
