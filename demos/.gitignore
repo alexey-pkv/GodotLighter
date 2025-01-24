@@ -1,0 +1,4 @@
+# <version>/<name>
+*/*/.godot
+*/*/bin/*
+!*/*/bin/.keep

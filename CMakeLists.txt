@@ -48,6 +48,10 @@ file(GLOB_RECURSE GODOTLIGHTER_HEADERS
 	"./src/*.h"
 )
 
+file(GLOB_RECURSE GODOTLIGHTER_DEMOS_BIN 
+	"${CMAKE_CURRENT_SOURCE_DIR}/demos/*/*/bin/"
+)
+
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
     set(GODOTLIGHTER_PLATFORM linux)
 elseif(CMAKE_SYSTEM_NAME STREQUAL "Windows")
@@ -89,16 +93,15 @@ configure_file(
 ############################
 
 add_custom_target(godotlighter_build_godot_cpp
-    COMMAND scons platform=${GODOTLIGHTER_PLATFORM}
+    COMMAND scons platform=${GODOTLIGHTER_PLATFORM} -j8
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/godot-cpp
     COMMENT "Building Godot C++ bindings for ${PLATFORM} using SCons"
 )
 
-
-add_library(godotlighter SHARED ${GODOTLIGHTER_SOURCE})
+add_library(godotlighter EXCLUDE_FROM_ALL SHARED ${GODOTLIGHTER_SOURCE})
 
 set_target_properties(godotlighter PROPERTIES 
-	OUTPUT_NAME "godotlighter"
+	OUTPUT_NAME "godotlighter.${GODOTLIGHTER_PLATFORM}.template_debug.x86_64"
 	ARCHIVE_OUTPUT_DIRECTORY "${GODOTLIGHTER_BIN}"
 	LIBRARY_OUTPUT_DIRECTORY "${GODOTLIGHTER_BIN}"
 	RUNTIME_OUTPUT_DIRECTORY "${GODOTLIGHTER_BIN}")
@@ -109,6 +112,16 @@ target_include_directories(godotlighter PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/god
 target_include_directories(godotlighter PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/godot-cpp/gdextension/")
 
 target_link_libraries(godotlighter PRIVATE sqlighter)
+target_link_libraries(godotlighter PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/godot-cpp/bin/libgodot-cpp.linux.template_debug.x86_64.a)
+target_link_libraries(godotlighter PRIVATE sqlite3)
 
-# Optimize this part:
+# TODO: Optimize this part:
 # add_dependencies(godotlighter godotlighter_build_godot_cpp)
+
+# TODO: Change, as currently this works only for linux and only for debug.
+add_custom_command(
+    TARGET godotlighter POST_BUILD
+    COMMAND cp "${GODOTLIGHTER_BIN}/libgodotlighter.${GODOTLIGHTER_PLATFORM}.template_debug.x86_64.so" "${CMAKE_CURRENT_SOURCE_DIR}/demos/4.3/versions/bin"
+	COMMAND cp "${GODOTLIGHTER_BIN}/godotlighter.gdextension" "${CMAKE_CURRENT_SOURCE_DIR}/demos/4.3/versions/bin"
+    COMMENT "Copying file to each bin directory after build"
+)
