@@ -4,7 +4,22 @@
 #include <godot_cpp/variant/variant.hpp>
 
 
+using namespace godot;
 using namespace sqlighter;
+
+
+void _throw_invalid_variant_type(const Variant& v, int index)
+{
+	std::ostringstream ss {};
+	auto type = v.get_type();
+	auto name = Variant::get_type_name(type);
+	
+	ss
+		<< "The bind argument at index [" << index << "] is not of a valid type. Got `" 
+		<< str2str(name) << "`. Only, `bool`, `int`, `float`, `string` and `null` are supported.";
+	
+	throw excp(SQLIGHTER_ERR_VALUE, ss.str());
+}
 
 
 godot::Variant godot::val2var(const ScalarValue& val)
@@ -66,22 +81,14 @@ godot::vec<BindValue> godot::var2val(const godot::Array& vars)
 	
 	for (int i = 0; i < vars.size(); i++)
 	{
-		BindValue v;
+		BindValue bind;
 		
-		if (!var2val(vars[i], v))
+		if (!var2val(vars[i], bind))
 		{
-			std::ostringstream ss {};
-			auto type = vars[i].get_type();
-			auto name = Variant::get_type_name(type);
-			
-			ss
-				<< "The bind argument at index [" << i << "] is not of a valid type. Got `" 
-				<< str2str(name) << "`. Only, `bool`, `int`, `float`, `string` and `null` are supported.";
-			
-			throw excp(SQLIGHTER_ERR_VALUE, ss.str());
+			_throw_invalid_variant_type(vars[i], i);
 		}
 		
-		into.emplace_back(std::move(v));
+		into.emplace_back(std::move(bind));
 	}
 	
 	return into;
