@@ -12,6 +12,6 @@ func _ready() -> void:
 	# OR :
 	# print(GodotLighter.versions_info())
 	
-	print(sql.query_all("SELECT 1 UNION SELECT 2", []))
+	print(sql.query_all("SELECT ? as a UNION ALL SELECT ?", [1, "A", self]))
 	
 	

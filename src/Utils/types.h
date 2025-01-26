@@ -36,9 +36,14 @@ namespace godot
 	inline str str2str(const gstr& s) { return { s.utf8().get_data() }; }
 	
 	Variant val2var(const sqlighter::ScalarValue& val);
+	bool var2val(const Variant& var, sqlighter::BindValue& val);
+	vec<sqlighter::BindValue> var2val(const godot::Array& vars);
 	
 	typedef sqlighter::Stmt					stmt;
 	typedef sqlighter::SQLighterException	excp;
+	
+	
+	
 }
 
 

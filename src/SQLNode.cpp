@@ -1,8 +1,8 @@
 #include "SQLNode.h"
 
 
-#include "Utils/gd_path.h"
 #include "Utils/macros.h"
+#include "Utils/gd_path.h"
 
 #include "GLighter.h"
 
@@ -107,17 +107,7 @@ void SQLNode::close()
 
 bool SQLNode::execute(const gstr& query, const Array& binds)
 {
-	if (!open()) return false;
-	
-	try
-	{
-		return !m_sql->execute(str2str(query)).is_error();
-	}
-	catch (const excp& e)
-	{
-		GLighter::handle_error(e);
-		return false;
-	}
+	return execute_stmt(query, binds)->is_failed();
 }
 
 Ref<GLighterStmt> SQLNode::execute_stmt(const gstr& query, const Array& binds)
@@ -127,10 +117,28 @@ Ref<GLighterStmt> SQLNode::execute_stmt(const gstr& query, const Array& binds)
 		return GLighterStmt::from_error(GLighter::last_err());
 	}
 	
+	auto query_str = str2str(query);
+	godot::vec<BindValue> binds_v = {};
+	
 	try
 	{
-		auto res = m_sql->execute(str2str(query));
-		int i = 1;
+		binds_v = var2val(binds);
+	}
+	catch (const excp& e)
+	{
+		SQLighterException ee(e);
+		
+		ee.query(query_str);
+		
+		GLighter::handle_error(ee);
+		return GLighterStmt::from_error(ee);
+	}
+	
+	try
+	{
+		auto cmd = m_sql->direct().append(query_str, binds_v);
+		auto res = cmd.execute();
+		
 		return GLighterStmt::from_stmt(std::move(res));
 	}
 	catch (const excp& e)
