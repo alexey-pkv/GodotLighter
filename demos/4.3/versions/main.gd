@@ -1,11 +1,17 @@
 extends Control
 
 
-# Called when the node enters the scene tree for the first time.
+@onready var sql: SQLNode = $SQLNode
+
+
 func _ready() -> void:
-	pass # Replace with function body.
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	print(SQLNode.sqlighter_version())
+	print("GodotLighter : " + GLighter.library_version())
+	print("SQLighter    : " + GLighter.sqlighter_version())
+	print("SQLite       : " + GLighter.sqlite_version())
+	
+	# OR :
+	# print(GodotLighter.versions_info())
+	
+	print(sql.query_all("SELECT 1 UNION SELECT 2", []))
+	
+	

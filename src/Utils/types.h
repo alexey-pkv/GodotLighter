@@ -1,0 +1,45 @@
+#ifndef GODOTLIGHTER_TYPES_H
+#define GODOTLIGHTER_TYPES_H
+
+
+#include <core/Stmt.h>
+#include <core/ScalarValue.h>
+#include <exceptions/sqlighter_exceptions.h>
+
+#include <memory>
+#include <string>
+#include <sstream>
+
+#include <godot_cpp/variant/string.hpp>
+
+
+namespace godot
+{
+	const int DEFAULT_FAILSAFE	= 10000; 
+	
+	
+	typedef godot::String gstr;
+	typedef std::string str;
+	
+	template<typename T>
+	using vec = std::vector<T>;
+	
+	template<typename T>
+	using uptr = std::unique_ptr<T>;
+	
+	template<typename T>
+	using sptr = std::shared_ptr<T>;
+	
+	inline gstr str2str(const std::ostringstream& ss) { return { ss.str().c_str() }; }
+	inline gstr str2str(std::string_view sv) { return { sv.data() }; }
+	inline gstr str2str(const str& s) { return { s.c_str() }; }
+	inline str str2str(const gstr& s) { return { s.utf8().get_data() }; }
+	
+	Variant val2var(const sqlighter::ScalarValue& val);
+	
+	typedef sqlighter::Stmt					stmt;
+	typedef sqlighter::SQLighterException	excp;
+}
+
+
+#endif

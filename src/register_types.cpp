@@ -2,6 +2,7 @@
 
 
 #include "SQLNode.h"
+#include "GLighter.h"
 
 
 #include <gdextension_interface.h>
@@ -21,7 +22,11 @@ void godot::initialize_godotlighter_module(ModuleInitializationLevel p_level)
 	}
 	
 	
-	GDREGISTER_CLASS(SQLNode);
+	ClassDB::register_class<GLighterException>();
+	ClassDB::register_class<GLighterStmt>();
+	
+	ClassDB::register_class<SQLNode>();
+	ClassDB::register_abstract_class<GLighter>();
 }
 
 void godot::uninitialize_godotlighter_module(ModuleInitializationLevel p_level)

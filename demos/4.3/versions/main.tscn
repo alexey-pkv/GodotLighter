@@ -11,7 +11,5 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_fu0mr")
 
-[node name="Label" type="Label" parent="."]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 23.0
+[node name="SQLNode" type="SQLNode" parent="."]
+db_path = "res://my.db"

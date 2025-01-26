@@ -25,7 +25,7 @@ include(FetchContent)
 FetchContent_Declare(
 	sqlighter
 	GIT_REPOSITORY	https://github.com/alexey-pkv/sqlighter.git
-	GIT_TAG			v1.0.0
+	GIT_TAG			v0.1.0
 )
 
 set(SQLIGHTER_BUILD_STATIC_LIBS ON)
@@ -41,11 +41,11 @@ set_target_properties(sqlighter PROPERTIES POSITION_INDEPENDENT_CODE ON)
 set(GODOTLIGHTER_BIN "${CMAKE_BINARY_DIR}/bin")
 
 file(GLOB_RECURSE GODOTLIGHTER_SOURCE
-	"./src/*.cpp"
+	"${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
 )
 
 file(GLOB_RECURSE GODOTLIGHTER_HEADERS
-	"./src/*.h"
+	"${CMAKE_CURRENT_SOURCE_DIR}/src/*.h"
 )
 
 file(GLOB_RECURSE GODOTLIGHTER_DEMOS_BIN 
@@ -76,13 +76,13 @@ set(GODOTLIGHTER_GODOT_VERSION "4.3")
 ############################
 
 configure_file(
-	"${CMAKE_CURRENT_SOURCE_DIR}/src/godotlighter_version.h.in"
+	"${CMAKE_CURRENT_SOURCE_DIR}/resources/godotlighter_version.h.in"
 	"${GODOTLIGHTER_BIN}/godotlighter_version.h"
 	@ONLY
 )
 
 configure_file(
-	"${CMAKE_CURRENT_SOURCE_DIR}/src/godotlighter.gdextension"
+	"${CMAKE_CURRENT_SOURCE_DIR}/resources/godotlighter.gdextension"
 	"${GODOTLIGHTER_BIN}/godotlighter.gdextension"
 	@ONLY
 )
@@ -110,6 +110,7 @@ target_include_directories(godotlighter PRIVATE ${GODOTLIGHTER_BIN})
 target_include_directories(godotlighter PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/godot-cpp/gen/include/")
 target_include_directories(godotlighter PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/godot-cpp/include/")
 target_include_directories(godotlighter PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/godot-cpp/gdextension/")
+target_include_directories(godotlighter PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/src/")
 
 target_link_libraries(godotlighter PRIVATE sqlighter)
 target_link_libraries(godotlighter PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/godot-cpp/bin/libgodot-cpp.linux.template_debug.x86_64.a)
