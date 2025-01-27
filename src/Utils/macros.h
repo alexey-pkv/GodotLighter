@@ -66,10 +66,5 @@
 	Ref<class> as(const gstr& alias);								\
 	Ref<class> from(const gstr& table);								\
 	Ref<class> from_scheme(const gstr& scheme, const gstr& table);
-
-#define CLAUSE_TABLE_HEADER(class)									\
-	Ref<class> as(const gstr& alias);								\
-	Ref<class> table(const gstr& table);							\
-	Ref<class> table_in(const gstr& scheme, const gstr& table);
 		
 #endif

@@ -33,14 +33,14 @@
 	Ref<class> class::or_ignore()	{ m_cmd->or_ignore(); return { this }; }	\
 	Ref<class> class::or_abort()	{ m_cmd->or_abort(); return { this }; }		
 
-#define CLAUSE_OR_BIND(class)																	\
+#define CLAUSE_OR_BIND(class)												\
 	ClassDB::bind_method(D_METHOD("or_rollback"),	&class::or_rollback);	\
 	ClassDB::bind_method(D_METHOD("or_fail"),		&class::or_fail);		\
 	ClassDB::bind_method(D_METHOD("or_replace"),	&class::or_replace);	\
 	ClassDB::bind_method(D_METHOD("or_ignore"),		&class::or_ignore);		\
 	ClassDB::bind_method(D_METHOD("or_abort"),		&class::or_abort);			
 
-#define CLAUSE_SET_IMP(class)														\
+#define CLAUSE_SET_IMPL(class)														\
 	Ref<class> class::set_exp(const gstr& expression, const Array& binds)	 		\
 	{																				\
 		TRY_SQLIGHTER_ACTION(m_cmd->set_exp(str2str(expression), var2val(binds)));	\
@@ -57,29 +57,6 @@
 	ClassDB::bind_method(D_METHOD("set", "field", "value"),				&class::set);		\
 	ClassDB::bind_method(D_METHOD("set_exp", "expression", "binds"),	&class::or_abort);
 
-#define CLAUSE_TABLE_IMPL(class)										\
-	Ref<class> class::as(const gstr& alias)								\
-	{																	\
-		m_cmd->as(str2str(alias));										\
-		return { this };												\
-	}																	\
-																		\
-	Ref<class> class::table(const gstr& table)							\
-	{																	\
-		m_cmd->table(str2str(table));									\
-		return { this };												\
-	}																	\
-																		\
-	Ref<class> class::table_in(const gstr& scheme, const gstr& table)	\
-	{																	\
-		m_cmd->table(str2str(scheme), str2str(table));					\
-		return { this };												\
-	}
-
-#define CLAUSE_TABLE_BIND(class)														\
-	ClassDB::bind_method(D_METHOD("as", "alias"),					&class::as);		\
-	ClassDB::bind_method(D_METHOD("table", "table"),				&class::table);		\
-	ClassDB::bind_method(D_METHOD("table_in", "scheme", "table"),	&class::table_in);
 
 #define CLAUSE_WHERE_IMPL(class)														\
 	Ref<class> class::where(const gstr& expression, const Array& binds)					\

@@ -15,7 +15,6 @@ namespace godot
 		AS_GD_CLASS(SQLUpdate, SQLCommand);
 	private:
 		uptr<sqlighter::CMDUpdate> m_cmd { nullptr };
-		str m_scheme {};
 		
 		
 	private:
@@ -24,7 +23,10 @@ namespace godot
 		
 		
 	public:
-		CLAUSE_TABLE_HEADER(SQLUpdate);
+		Ref<SQLUpdate> as(const gstr& alias);
+		Ref<SQLUpdate> table(const gstr& table);
+		Ref<SQLUpdate> table_in(const gstr& scheme, const gstr& table);
+	
 		CLAUSE_OR_HEADER(SQLUpdate);
 		CLAUSE_SET_HEADER(SQLUpdate);
 		CLAUSE_WHERE_HEADER(SQLUpdate);

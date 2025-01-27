@@ -14,7 +14,10 @@ using namespace sqlighter;
 
 void SQLUpdate::_bind_methods()
 {
-	CLAUSE_TABLE_BIND(SQLUpdate);
+	ClassDB::bind_method(D_METHOD("as", "alias"),					&SQLUpdate::as);
+	ClassDB::bind_method(D_METHOD("table", "table"),				&SQLUpdate::table);
+	ClassDB::bind_method(D_METHOD("table_in", "scheme", "table"),	&SQLUpdate::table_in);
+	
 	CLAUSE_OR_BIND(SQLUpdate);
 	CLAUSE_SET_BIND(SQLUpdate)
 	CLAUSE_WHERE_BIND(SQLUpdate);
@@ -32,9 +35,27 @@ void SQLUpdate::init(CMDUpdate&& cmd)
 }
 
 
-CLAUSE_TABLE_IMPL(SQLUpdate)
+Ref<SQLUpdate> SQLUpdate::as(const gstr& alias)
+{
+	m_cmd->as(str2str(alias));
+	return { this };
+}
+
+Ref<SQLUpdate> SQLUpdate::table(const gstr& table)
+{
+	m_cmd->table(str2str(table));
+	return { this };
+}
+
+Ref<SQLUpdate> SQLUpdate::table_in(const gstr& scheme, const gstr& table)
+{
+	m_cmd->table(str2str(scheme), str2str(table));
+	return { this };
+}
+		
+
 CLAUSE_OR_IMPL(SQLUpdate)
-CLAUSE_SET_IMP(SQLUpdate)
+CLAUSE_SET_IMPL(SQLUpdate)
 CLAUSE_WHERE_IMPL(SQLUpdate)
 
 

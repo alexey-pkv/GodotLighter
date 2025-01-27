@@ -4,6 +4,7 @@
 #include "Utils/types.h"
 #include "Utils/macros.h"
 #include "Utils/macros.cpp.h"
+#include "Utils/errors.h"
 
 #include "GLighter.h"
 
@@ -76,15 +77,7 @@ Ref<SQLSelect> SQLSelect::columns(const Array& columns)
 	{
 		if (columns[i].get_type() != Variant::STRING)
 		{
-			std::ostringstream ss {};
-			auto type = columns[i].get_type();
-			auto name = Variant::get_type_name(type);
-			
-			ss
-				<< "A column at index [" << i << "] is not a string. " 
-				<< "Got `" << str2str(name) << "` instead";
-			
-			GLighter::handle_error(excp(SQLIGHTER_ERR_VALUE, ss.str()));
+			column_name_not_a_string_error(columns[i], i);
 			return { this }; 
 		}
 		
