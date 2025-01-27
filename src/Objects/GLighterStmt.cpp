@@ -404,9 +404,8 @@ Array GLighterStmt::column_names()
 
 Ref<GLighterStmt> GLighterStmt::from_error(const excp& err)
 {
-	Ref<GLighterStmt> res;
+	auto res = make_ref<GLighterStmt>();
 	
-	res.instantiate();
 	res->init_with(err);
 	
 	return res;
@@ -414,9 +413,8 @@ Ref<GLighterStmt> GLighterStmt::from_error(const excp& err)
 
 Ref<GLighterStmt> GLighterStmt::from_error(const Ref<GLighterException>& err)
 {
-	Ref<GLighterStmt> res;
+	auto res = make_ref<GLighterStmt>();
 	
-	res.instantiate();
 	res->init_with(err);
 	
 	return res;
@@ -424,9 +422,8 @@ Ref<GLighterStmt> GLighterStmt::from_error(const Ref<GLighterException>& err)
 
 Ref<GLighterStmt> GLighterStmt::from_stmt(stmt&& s)
 {
-	Ref<GLighterStmt> res;
+	auto res = make_ref<GLighterStmt>();
 	
-	res.instantiate();
 	res->init_with(std::move(s));
 	
 	return res;

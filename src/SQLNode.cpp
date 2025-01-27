@@ -47,6 +47,12 @@ void SQLNode::_bind_methods()
 	ClassDB::bind_method(D_METHOD("query_column_all_max", "query", "binds", "failsafe"),	&SQLNode::query_column_all_max);
 	
 	ClassDB::bind_method(D_METHOD("count_rows", "table_name"),	&SQLNode::count_rows);
+	
+	ClassDB::bind_method(D_METHOD("direct"),		&SQLNode::direct);
+	ClassDB::bind_method(D_METHOD("select"),		&SQLNode::select);
+	ClassDB::bind_method(D_METHOD("delete"),		&SQLNode::del);
+	ClassDB::bind_method(D_METHOD("create_table"),	&SQLNode::create_table);
+	ClassDB::bind_method(D_METHOD("drop"),			&SQLNode::drop);
 }
 
 
@@ -219,4 +225,29 @@ bool SQLNode::reindex(const gstr& element) const
 bool SQLNode::reindex_in(const gstr& scheme, const gstr& element) const
 {
 	RETURN_TRY_SQLIGHTER_ACTION(m_sql->reindex(str2str(scheme), str2str(element)));
+}
+
+Ref<SQLDirect> SQLNode::direct() const
+{
+	return make_ref<SQLDirect>(std::move(m_sql->direct()));
+}
+
+Ref<SQLDelete> SQLNode::del() const
+{
+	return make_ref<SQLDelete>(std::move(m_sql->del()));
+}
+
+Ref<SQLSelect> SQLNode::select() const
+{
+	return make_ref<SQLSelect>(std::move(m_sql->select()));
+}
+
+Ref<SQLCreateTable> SQLNode::create_table() const
+{
+	return make_ref<SQLCreateTable>(std::move(m_sql->create()));
+}
+
+Ref<SQLDrop> SQLNode::drop() const
+{
+	return make_ref<SQLDrop>(std::move(m_sql->drop()));
 }

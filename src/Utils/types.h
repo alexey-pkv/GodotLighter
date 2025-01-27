@@ -10,6 +10,7 @@
 #include <string>
 #include <sstream>
 
+#include <godot_cpp/classes/ref.hpp>
 #include <godot_cpp/variant/string.hpp>
 
 
@@ -35,15 +36,41 @@ namespace godot
 	inline gstr str2str(const str& s) { return { s.c_str() }; }
 	inline str str2str(const gstr& s) { return { s.utf8().get_data() }; }
 	
+	template <typename T>
+	inline Ref<T> make_ref()
+	{
+		Ref<T> r;
+		r.instantiate();
+		return r;
+	}
+	
+	template<class T, class ... ARGS>
+	Ref<T> make_ref(const ARGS& ... args)
+	{
+		Ref<T> r;
+		r.instantiate();
+		r->init(args...);
+		return r;
+	}
+	
+	template<class T, class MARG>
+	Ref<T> make_ref(MARG&& marg)
+	{
+		Ref<T> r;
+		r.instantiate();
+		r->init(std::forward<MARG>(marg));
+		return r;
+	}
+	
 	Variant val2var(const sqlighter::ScalarValue& val);
+	Variant val2var(const sqlighter::BindValue& val);
+	Array val2var(const vec<sqlighter::BindValue>& val);
 	bool var2val(const Variant& var, sqlighter::BindValue& val);
+	sqlighter::BindValue var2val_unsafe(const godot::Variant& var);
 	vec<sqlighter::BindValue> var2val(const godot::Array& vars);
 	
 	typedef sqlighter::Stmt					stmt;
 	typedef sqlighter::SQLighterException	excp;
-	
-	
-	
 }
 
 

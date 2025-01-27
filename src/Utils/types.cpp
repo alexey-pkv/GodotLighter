@@ -21,6 +21,19 @@ void _throw_invalid_variant_type(const Variant& v, int index)
 	throw excp(SQLIGHTER_ERR_VALUE, ss.str());
 }
 
+void _throw_invalid_variant_type(const Variant& v)
+{
+	std::ostringstream ss {};
+	auto type = v.get_type();
+	auto name = Variant::get_type_name(type);
+	
+	ss
+		<< "The bind argument is not of a valid type. Got `" 
+		<< str2str(name) << "`. Only, `bool`, `int`, `float`, `string` and `null` are supported.";
+	
+	throw excp(SQLIGHTER_ERR_VALUE, ss.str());
+}
+
 
 godot::Variant godot::val2var(const ScalarValue& val)
 {
@@ -40,6 +53,42 @@ godot::Variant godot::val2var(const ScalarValue& val)
 		default:
 			return { nullptr };
 	}
+}
+
+Variant godot::val2var(const BindValue& val)
+{
+	switch (val.get_type())
+	{
+		case BindValue::type::INT_32:
+			return { val.get_value().i32 };
+			
+		case BindValue::type::INT_64:
+			return { val.get_value().i64 };
+			
+		case BindValue::type::DOUBLE:
+			return { val.get_value().dbl };
+			
+		case BindValue::type::TEXT:
+		case BindValue::type::TEXT_16:
+		case BindValue::type::TEXT_64:
+			return { str2str(val.get_str_value()) };
+			
+		case BindValue::type::NULL_VAL:
+		default:
+			return {nullptr };
+	}
+}
+
+Array godot::val2var(const vec<BindValue>& val)
+{
+	Array a {};
+	
+	for (const auto& v : val)
+	{
+		a.push_back(val2var(v));
+	}
+	
+	return a;
 }
 
 bool godot::var2val(const godot::Variant& var, BindValue& into)
@@ -69,6 +118,32 @@ bool godot::var2val(const godot::Variant& var, BindValue& into)
 		default:
 			return false;
 	}
+}
+
+BindValue godot::var2val_unsafe(const godot::Variant& var)
+{
+	switch (var.get_type())
+	{
+		case godot::Variant::Type::BOOL:
+			return ((int)var == 0 ? 0 : 1);
+		
+		case godot::Variant::Type::INT:
+			return (int64_t)var;
+
+		case godot::Variant::Type::FLOAT:
+			return (double)var;
+
+		case godot::Variant::Type::STRING:
+			return { str2str((gstr)var) };
+
+		case godot::Variant::Type::NIL:
+			return BindValue::null;
+		
+		default:
+			_throw_invalid_variant_type(var);
+	}
+	
+	return BindValue::null;
 }
 
 godot::vec<BindValue> godot::var2val(const godot::Array& vars)
