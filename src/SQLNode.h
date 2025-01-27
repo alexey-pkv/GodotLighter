@@ -11,6 +11,7 @@
 #include "SQL/SQLDelete.h"
 #include "SQL/SQLDrop.h"
 #include "SQL/SQLCreateTable.h"
+#include "SQL/SQLUpdate.h"
 
 #include <sqlighter.h>
 #include <godot_cpp/classes/node.hpp>
@@ -70,8 +71,9 @@ namespace godot
 		
 	public: // SQLs
 		Ref<SQLDirect>		direct() const;
-		Ref<SQLDelete>		del() const;
 		Ref<SQLSelect>		select() const;
+		Ref<SQLUpdate>		update() const;
+		Ref<SQLDelete>		del() const;
 		Ref<SQLCreateTable>	create_table() const;
 		Ref<SQLDrop>		drop() const;
 		
@@ -81,7 +83,6 @@ namespace godot
 		
 	public:
 		CMDInsert		insert() const;
-		CMDUpdate		update() const;
 		
 	public:
 		 */

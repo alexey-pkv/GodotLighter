@@ -50,6 +50,7 @@ void SQLNode::_bind_methods()
 	
 	ClassDB::bind_method(D_METHOD("direct"),		&SQLNode::direct);
 	ClassDB::bind_method(D_METHOD("select"),		&SQLNode::select);
+	ClassDB::bind_method(D_METHOD("update"),		&SQLNode::update);
 	ClassDB::bind_method(D_METHOD("delete"),		&SQLNode::del);
 	ClassDB::bind_method(D_METHOD("create_table"),	&SQLNode::create_table);
 	ClassDB::bind_method(D_METHOD("drop"),			&SQLNode::drop);
@@ -240,6 +241,11 @@ Ref<SQLDelete> SQLNode::del() const
 Ref<SQLSelect> SQLNode::select() const
 {
 	return make_ref<SQLSelect>(std::move(m_sql->select()));
+}
+
+Ref<SQLUpdate> SQLNode::update() const
+{
+	return make_ref<SQLUpdate>(std::move(m_sql->update()));
 }
 
 Ref<SQLCreateTable> SQLNode::create_table() const
