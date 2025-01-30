@@ -25,7 +25,7 @@ include(FetchContent)
 FetchContent_Declare(
 	sqlighter
 	GIT_REPOSITORY	https://github.com/alexey-pkv/sqlighter.git
-	GIT_TAG			v0.1.0
+	GIT_TAG			v0.1.4
 )
 
 set(SQLIGHTER_BUILD_STATIC_LIBS ON)
