@@ -2,8 +2,11 @@
 
 
 #include "Utils/types.h"
-#include "Utils/macros.h"
 #include "Utils/macros.cpp.h"
+#include "SQL/Clause/FromClause.h"
+#include "SQL/Clause/LimitClause.h"
+#include "SQL/Clause/OrderByClause.h"
+#include "SQL/Clause/WhereClause.h"
 
 #include "GLighter.h"
 
@@ -16,10 +19,10 @@ void SQLDelete::_bind_methods()
 {
 	ClassDB::bind_method(D_METHOD("del"), &SQLDelete::del);
 	
-	CLAUSE_FROM_BIND(SQLDelete);
-	CLAUSE_WHERE_BIND(SQLDelete);
-	CLAUSE_ORDER_BY_BIND(SQLDelete);
-	CLAUSE_LIMIT_BIND(SQLDelete);
+	bind_from<SQLDelete>();
+	bind_limit<SQLDelete>();
+	bind_order_by<SQLDelete>();
+	bind_where<SQLDelete>();
 }
 
 

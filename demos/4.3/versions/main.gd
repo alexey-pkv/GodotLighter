@@ -33,5 +33,7 @@ func _ready() -> void:
 	create.column_exp("`name` TEXT NOT NULL")
 	print(create.create())
 	
+	print(sql.select().from("a").assemble());
+	
 	
 	

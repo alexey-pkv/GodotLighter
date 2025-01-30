@@ -1,7 +1,7 @@
 [configuration]
 entry_symbol = "godotlighter_library_init"
 compatibility_minimum = "@GODOTLIGHTER_GODOT_VERSION@"
-reloadable = true
+reloadable = false
 
 
 [libraries]

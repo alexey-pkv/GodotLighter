@@ -29,5 +29,5 @@ Array SQLCommand::binds() const
 
 Ref<GLighterStmt> SQLCommand::execute()
 {
-	RETURN_TRY_SQLIGHTER_STMT(get_cmd()->execute());
+	return GLighter::try_stmt_action([&] { return get_cmd()->execute(); });
 }

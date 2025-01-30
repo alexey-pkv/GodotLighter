@@ -2,38 +2,6 @@
 #define GODOTLIGHTER_MACROS_H
 
 
-#define RETURN_TRY_SQLIGHTER_ACTION(what) \
-	try	{ \
-		what; \
-		return true; \
-	} \
-	catch (const excp& e) { \
-		godot::GLighter::handle_error(e); \
-		return false; \
-	}
-
-#define TRY_SQLIGHTER_ACTION(what) \
-	try	{ what; } \
-	catch (const excp& e) { godot::GLighter::handle_error(e); }
-
-#define RETURN_TRY_SQLIGHTER_VALUE(what, default_value) \
-	try	{ \
-		return what; \
-	} \
-	catch (const excp& e) { \
-		godot::GLighter::handle_error(e); \
-		return default_value; \
-	}
-
-#define RETURN_TRY_SQLIGHTER_STMT(what) \
-	try	{ \
-		return GLighterStmt::from_stmt(what); \
-	} \
-	catch (const excp& e) { \
-		godot::GLighter::handle_error(e); \
-		return GLighterStmt::from_error(e); \
-	}
-
 #define CLAUSE_WHERE_HEADER(class) \
 	Ref<class> where(const gstr& expression, const Array& binds); \
 	Ref<class> where_null(const gstr& column); \
@@ -66,5 +34,6 @@
 	Ref<class> as(const gstr& alias);								\
 	Ref<class> from(const gstr& table);								\
 	Ref<class> from_scheme(const gstr& scheme, const gstr& table);
-		
+
+
 #endif

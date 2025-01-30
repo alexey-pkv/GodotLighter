@@ -2,9 +2,12 @@
 
 
 #include "Utils/types.h"
-#include "Utils/macros.h"
 #include "Utils/macros.cpp.h"
 #include "Utils/errors.h"
+
+#include "SQL/Clause/LimitClause.h"
+#include "SQL/Clause/OrderByClause.h"
+#include "SQL/Clause/WhereClause.h"
 
 #include "GLighter.h"
 
@@ -22,10 +25,11 @@ void SQLSelect::_bind_methods()
 	ClassDB::bind_method(D_METHOD("column_as", "column", "as"),			&SQLSelect::column_as);
 	ClassDB::bind_method(D_METHOD("columns", "columns"),				&SQLSelect::columns);
 	
-	CLAUSE_FROM_BIND(SQLSelect);
-	CLAUSE_WHERE_BIND(SQLSelect);
-	CLAUSE_ORDER_BY_BIND(SQLSelect);
-	CLAUSE_LIMIT_BIND(SQLSelect);
+	
+	bind_from<SQLSelect>();
+	bind_limit<SQLSelect>();
+	bind_order_by<SQLSelect>();
+	bind_where<SQLSelect>();
 	
 	ClassDB::bind_method(D_METHOD("query_row"),			&SQLSelect::query_row);
 	ClassDB::bind_method(D_METHOD("query_row_numeric"),	&SQLSelect::query_row_numeric);
@@ -55,7 +59,11 @@ Ref<SQLSelect> SQLSelect::distinct()
 
 Ref<SQLSelect> SQLSelect::column_exp(const gstr& expression, const Array& binds)
 {
-	TRY_SQLIGHTER_ACTION(m_cmd->column_exp(str2str(expression), var2val(binds)));
+	godot::GLighter::try_action([&] 
+	{
+		m_cmd->column_exp(str2str(expression), var2val(binds));
+	});
+	
 	return { this };
 }
 

@@ -2,8 +2,11 @@
 
 
 #include "Utils/types.h"
-#include "Utils/macros.h"
 #include "Utils/macros.cpp.h"
+
+#include "SQL/Clause/OrClause.h"
+#include "SQL/Clause/SetClause.h"
+#include "SQL/Clause/WhereClause.h"
 
 #include "GLighter.h"
 
@@ -18,9 +21,9 @@ void SQLUpdate::_bind_methods()
 	ClassDB::bind_method(D_METHOD("table", "table"),				&SQLUpdate::table);
 	ClassDB::bind_method(D_METHOD("table_in", "scheme", "table"),	&SQLUpdate::table_in);
 	
-	CLAUSE_OR_BIND(SQLUpdate);
-	CLAUSE_SET_BIND(SQLUpdate)
-	CLAUSE_WHERE_BIND(SQLUpdate);
+	bind_or<SQLUpdate>();
+	bind_set<SQLUpdate>();
+	bind_where<SQLUpdate>();
 	
 	ClassDB::bind_method(D_METHOD("update"), &SQLUpdate::update);
 }

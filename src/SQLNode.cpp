@@ -201,32 +201,36 @@ Array SQLNode::query_column_all_max(const gstr& query, const Array& binds, int f
 
 int SQLNode::count_rows(const gstr& table_name)
 {
-	RETURN_TRY_SQLIGHTER_VALUE(m_sql->count_rows(str2str(table_name)), 0);
+	return GLighter::try_action(
+		[&] { return m_sql->count_rows(str2str(table_name)); }, 
+		0);
 }
 
 bool SQLNode::begin() const
 {
-	RETURN_TRY_SQLIGHTER_ACTION(m_sql->begin());
+	return GLighter::try_action_bool([&] { m_sql->begin(); });
 }
 
 bool SQLNode::commit() const
 {
-	RETURN_TRY_SQLIGHTER_ACTION(m_sql->commit());
+	return GLighter::try_action_bool([&] { m_sql->commit(); });
 }
 
 bool SQLNode::rollback() const
 {
-	RETURN_TRY_SQLIGHTER_ACTION(m_sql->rollback());
+	return GLighter::try_action_bool([&] { m_sql->rollback(); });
 }
 
 bool SQLNode::reindex(const gstr& element) const
 {
-	RETURN_TRY_SQLIGHTER_ACTION(m_sql->reindex(str2str(element)));
+	return GLighter::try_action_bool(
+		[&] { m_sql->reindex(str2str(element)); });
 }
 
 bool SQLNode::reindex_in(const gstr& scheme, const gstr& element) const
 {
-	RETURN_TRY_SQLIGHTER_ACTION(m_sql->reindex(str2str(scheme), str2str(element)));
+	return GLighter::try_action_bool(
+		[&] { m_sql->reindex(str2str(scheme), str2str(element)); });
 }
 
 Ref<SQLDirect> SQLNode::direct() const

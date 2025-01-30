@@ -2,9 +2,11 @@
 
 
 #include "Utils/types.h"
-#include "Utils/macros.h"
 #include "Utils/macros.cpp.h"
 #include "Utils/errors.h"
+
+#include "SQL/Clause/OrClause.h"
+#include "SQL/Clause/SetClause.h"
 
 #include "GLighter.h"
 
@@ -28,8 +30,8 @@ void SQLInsert::_bind_methods()
 	ClassDB::bind_method(D_METHOD("record", "values"),		&SQLInsert::record);
 	ClassDB::bind_method(D_METHOD("records", "values_set"),	&SQLInsert::records);
 	
-	CLAUSE_OR_BIND(SQLInsert);
-	CLAUSE_SET_BIND(SQLInsert);
+	bind_or<SQLInsert>();
+	bind_set<SQLInsert>();
 	
 	ClassDB::bind_method(D_METHOD("insert"), &SQLInsert::insert);
 }
@@ -110,7 +112,8 @@ Ref<SQLInsert> SQLInsert::columns(const Array& names)
 
 Ref<SQLInsert> SQLInsert::record(const Array& values)
 {
-	TRY_SQLIGHTER_ACTION(m_cmd->record(var2val(values)));
+	godot::GLighter::try_action([&] { m_cmd->record(var2val(values)); });
+	
 	return { this };
 }
 

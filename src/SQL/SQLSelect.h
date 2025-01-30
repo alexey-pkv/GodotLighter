@@ -4,13 +4,15 @@
 
 #include "SQLCommand.h"
 #include "Utils/macros.h"
+#include "SQL/Clause/FromClause.h"
 
 #include <connectors/CMDSelect.h>
 
 
 namespace godot
 {
-	class SQLSelect : public SQLCommand
+	class SQLSelect : 
+		public SQLCommand 
 	{
 		AS_GD_CLASS(SQLSelect, SQLCommand);
 	private:
@@ -21,6 +23,10 @@ namespace godot
 	private:
 		sqlighter::CMD* get_cmd() override;
 		const sqlighter::CMD* get_cmd() const override;
+		
+		
+	protected:
+		// sqlighter::CMDSelect& get_from_command() override;
 		
 		
 	public:

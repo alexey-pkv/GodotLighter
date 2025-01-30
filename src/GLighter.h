@@ -5,6 +5,7 @@
 #include "Utils/types.h"
 #include "Utils/gd_class.h"
 #include "Exceptions/GLighterException.h"
+#include "Objects/GLighterStmt.h"
 
 #include <godot_cpp/classes/object.hpp>
 
@@ -35,6 +36,62 @@ namespace godot
 		
 	public: // Internals
 		static void handle_error(const excp& e);
+		
+		template <typename F>
+        static void try_action(F&& action) noexcept
+        {
+            try
+            {
+                action();
+            }
+            catch (const excp& e)
+            {
+                handle_error(e);
+            }
+        }
+		
+		template <typename F>
+        static bool try_action_bool(F&& action) noexcept
+        {
+            try
+            {
+                action();
+				return true;
+            }
+            catch (const excp& e)
+            {
+                handle_error(e);
+				return false;
+            }
+        }
+		
+		template <typename F, typename DT>
+        static DT try_action(F&& action, DT default_value) noexcept
+        {
+            try
+            {
+                return action();
+            }
+            catch (const excp& e)
+            {
+                handle_error(e);
+				return default_value;
+            }
+        }
+		
+		template <typename F>
+        static auto try_stmt_action(F&& action) noexcept
+        {
+            try
+            {
+                return GLighterStmt::from_stmt(action());
+            }
+            catch (const excp& e)
+            {
+                handle_error(e);
+				return GLighterStmt::from_error(e);
+            }
+        }
 	};
 }
 
