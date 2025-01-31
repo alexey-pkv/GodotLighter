@@ -4,14 +4,9 @@ extends Control
 @onready var sql: SQLNode  = $SQLNode
 
 
-func _ready() -> void:
-	pass # Replace with function body.
-
-
 func handle_sql_error(error: SQLErrorInfo) -> void:
 	print("Error in SQLNode: ")
 	print(error.error())
-
 
 func handle_run_commands_pressed() -> void:
 	print("Running an incorrect SQL query")
