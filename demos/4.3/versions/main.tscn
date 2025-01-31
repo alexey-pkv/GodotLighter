@@ -12,4 +12,5 @@ grow_vertical = 2
 script = ExtResource("1_fu0mr")
 
 [node name="SQLNode" type="SQLNode" parent="."]
-db_path = "res://my.db"
+db_path = ":memory:"
+in_memory = true

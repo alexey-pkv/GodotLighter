@@ -22,8 +22,8 @@ void godot::initialize_godotlighter_module(ModuleInitializationLevel p_level)
 	}
 	
 	
-	ClassDB::register_class<GLighterException>();
-	ClassDB::register_class<GLighterStmt>();
+	ClassDB::register_class<SQLErrorInfo>();
+	ClassDB::register_class<SQLStmt>();
 	
 	ClassDB::register_abstract_class<SQLCommand>();
 	ClassDB::register_class<SQLDirect>();

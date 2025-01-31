@@ -1,7 +1,6 @@
 #include "SQLNode.h"
 
 
-#include "Utils/macros.h"
 #include "Utils/gd_path.h"
 
 #include "GLighter.h"
@@ -21,7 +20,12 @@ void SQLNode::_bind_methods()
 	ClassDB::bind_method(D_METHOD("set_auto_create", "auto_create"),	&SQLNode::set_auto_create);
 	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "auto_create"), "set_auto_create", "get_auto_create");
 	
+	ClassDB::bind_method(D_METHOD("get_is_memory"),					&SQLNode::get_is_memory);
+	ClassDB::bind_method(D_METHOD("set_is_memory", "is_memory"),	&SQLNode::set_is_memory);
+	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "in_memory"), "set_is_memory", "get_is_memory");
+	
 	ClassDB::bind_method(D_METHOD("get_full_path"),	&SQLNode::get_full_path);
+	ClassDB::bind_method(D_METHOD("open"),			&SQLNode::open);
 	ClassDB::bind_method(D_METHOD("close"),			&SQLNode::close);
 	
 	ClassDB::bind_method(D_METHOD("execute", "query_string", "binds"),		&SQLNode::execute);
@@ -64,7 +68,14 @@ bool SQLNode::open()
 	
 	try
 	{
-		m_sql = std::make_unique<SQLighter>(to_path(m_path));
+		if (!get_is_memory())
+		{
+			m_sql = std::make_unique<SQLighter>(to_path(m_path));
+		}
+		else
+		{
+			m_sql = std::make_unique<SQLighter>(str2str(m_path));
+		}
 	}
 	catch (const excp& e)
 	{
@@ -102,6 +113,24 @@ void SQLNode::set_db_path(const gstr& path)
 	}
 }
 
+bool SQLNode::get_is_memory() const
+{
+	return m_path == ":memory:";
+}
+
+void SQLNode::set_is_memory(bool value)
+{
+	if (value == (m_path == ":memory:"))
+		return;
+	
+	m_path = value ? ":memory:" : "";
+	
+	if (m_sql)
+	{
+		m_sql = nullptr;
+	}
+}
+
 gstr SQLNode::get_full_path() const
 {
 	return str2str(to_path(m_path));
@@ -118,11 +147,11 @@ bool SQLNode::execute(const gstr& query, const Array& binds)
 	return execute_stmt(query, binds)->is_failed();
 }
 
-Ref<GLighterStmt> SQLNode::execute_stmt(const gstr& query, const Array& binds)
+Ref<SQLStmt> SQLNode::execute_stmt(const gstr& query, const Array& binds)
 {
 	if (!open())
 	{
-		return GLighterStmt::from_error(GLighter::last_err());
+		return SQLStmt::from_error(GLighter::last_err());
 	}
 	
 	auto query_str = str2str(query);
@@ -139,7 +168,7 @@ Ref<GLighterStmt> SQLNode::execute_stmt(const gstr& query, const Array& binds)
 		ee.query(query_str);
 		
 		GLighter::handle_error(ee);
-		return GLighterStmt::from_error(ee);
+		return SQLStmt::from_error(ee);
 	}
 	
 	try
@@ -147,12 +176,12 @@ Ref<GLighterStmt> SQLNode::execute_stmt(const gstr& query, const Array& binds)
 		auto cmd = m_sql->direct().append(query_str, binds_v);
 		auto res = cmd.execute();
 		
-		return GLighterStmt::from_stmt(std::move(res));
+		return SQLStmt::from_stmt(std::move(res));
 	}
 	catch (const excp& e)
 	{
 		GLighter::handle_error(e);
-		return GLighterStmt::from_error(e);
+		return SQLStmt::from_error(e);
 	}
 }
 
@@ -206,64 +235,79 @@ int SQLNode::count_rows(const gstr& table_name)
 		0);
 }
 
-bool SQLNode::begin() const
+bool SQLNode::begin()
 {
+	if (!open())
+		return false;
+	
 	return GLighter::try_action_bool([&] { m_sql->begin(); });
 }
 
-bool SQLNode::commit() const
+bool SQLNode::commit()
 {
+	if (!open())
+		return false;
+	
 	return GLighter::try_action_bool([&] { m_sql->commit(); });
 }
 
-bool SQLNode::rollback() const
+bool SQLNode::rollback()
 {
+	if (!open())
+		return false;
+	
 	return GLighter::try_action_bool([&] { m_sql->rollback(); });
 }
 
-bool SQLNode::reindex(const gstr& element) const
+bool SQLNode::reindex(const gstr& element)
 {
+	if (!open())
+		return false;
+	
 	return GLighter::try_action_bool(
 		[&] { m_sql->reindex(str2str(element)); });
 }
 
-bool SQLNode::reindex_in(const gstr& scheme, const gstr& element) const
+bool SQLNode::reindex_in(const gstr& scheme, const gstr& element)
 {
+	if (!open())
+		return false;
+	
 	return GLighter::try_action_bool(
 		[&] { m_sql->reindex(str2str(scheme), str2str(element)); });
 }
 
-Ref<SQLDirect> SQLNode::direct() const
+Ref<SQLDirect> SQLNode::direct()
 {
 	return make_ref<SQLDirect>(std::move(m_sql->direct()));
 }
 
-Ref<SQLDelete> SQLNode::del() const
+Ref<SQLDelete> SQLNode::del()
 {
 	return make_ref<SQLDelete>(std::move(m_sql->del()));
 }
 
-Ref<SQLSelect> SQLNode::select() const
+Ref<SQLSelect> SQLNode::select()
 {
 	return make_ref<SQLSelect>(std::move(m_sql->select()));
 }
 
-Ref<SQLInsert> SQLNode::insert() const
+Ref<SQLInsert> SQLNode::insert()
 {
 	return make_ref<SQLInsert>(std::move(m_sql->insert()));
 }
 
-Ref<SQLUpdate> SQLNode::update() const
+Ref<SQLUpdate> SQLNode::update()
 {
 	return make_ref<SQLUpdate>(std::move(m_sql->update()));
 }
 
-Ref<SQLCreateTable> SQLNode::create_table() const
+Ref<SQLCreateTable> SQLNode::create_table()
 {
 	return make_ref<SQLCreateTable>(std::move(m_sql->create()));
 }
 
-Ref<SQLDrop> SQLNode::drop() const
+Ref<SQLDrop> SQLNode::drop()
 {
 	return make_ref<SQLDrop>(std::move(m_sql->drop()));
 }

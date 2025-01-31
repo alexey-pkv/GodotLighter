@@ -14,7 +14,7 @@
 using namespace godot;
 
 
-Ref<GLighterException>	GLighter::m_e			{ nullptr };
+Ref<SQLErrorInfo>	GLighter::m_e			{nullptr };
 bool					GLighter::m_printErrors	{ true };
 		
 
@@ -37,7 +37,7 @@ bool GLighter::has_err()
 	return m_e == nullptr;
 }
 
-Ref<GLighterException> GLighter::last_err()
+Ref<SQLErrorInfo> GLighter::last_err()
 {
 	return m_e;
 }

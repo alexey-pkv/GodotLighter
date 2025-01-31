@@ -1,5 +1,5 @@
-#ifndef GODOTLIGHTER_GLIGHTEREXCEPTION_H
-#define GODOTLIGHTER_GLIGHTEREXCEPTION_H
+#ifndef GODOTLIGHTER_SQLERRORINFO_H
+#define GODOTLIGHTER_SQLERRORINFO_H
 
 
 #include "Utils/types.h"
@@ -11,9 +11,9 @@
 
 namespace godot
 {
-	class GLighterException : public RefCounted
+	class SQLErrorInfo : public RefCounted
 	{
-		AS_GD_CLASS(GLighterException, RefCounted);
+		AS_GD_CLASS(SQLErrorInfo, RefCounted);
 	private:
 		sqlighter::SQLighterException m_e { SQLIGHTER_OK };
 		
@@ -22,7 +22,7 @@ namespace godot
 		int err_code() const;
 		int err_sqlite_code() const;
 		gstr err_str() const;
-		gstr err_slighter_message() const;
+		gstr err_lighter_message() const;
 		gstr err_sqlite_message() const;
 		gstr err_query() const;
 		

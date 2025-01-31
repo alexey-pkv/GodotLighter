@@ -4,7 +4,7 @@
 
 #include "Utils/types.h"
 #include "Utils/gd_class.h"
-#include "Objects/GLighterStmt.h"
+#include "Objects/SQLStmt.h"
 
 #include <connectors/CMDDirect.h>
 
@@ -22,7 +22,7 @@ namespace godot
 	public:
 		gstr assemble() const;
 		Array binds() const;
-		Ref<GLighterStmt> execute();
+		Ref<SQLStmt> execute();
 	};
 }
 

@@ -4,15 +4,15 @@
 
 #include "Utils/types.h"
 #include "Utils/gd_class.h"
-#include "Objects/GLighterStmt.h"
+#include "Objects/SQLStmt.h"
 
+#include "SQL/SQLDrop.h"
 #include "SQL/SQLDirect.h"
 #include "SQL/SQLSelect.h"
 #include "SQL/SQLDelete.h"
-#include "SQL/SQLDrop.h"
-#include "SQL/SQLCreateTable.h"
 #include "SQL/SQLUpdate.h"
 #include "SQL/SQLInsert.h"
+#include "SQL/SQLCreateTable.h"
 
 #include <sqlighter.h>
 #include <godot_cpp/classes/node.hpp>
@@ -30,25 +30,25 @@ namespace godot
 		bool m_autoCreate	{ false };
 		
 		
-	private:
-		bool open();
-		
-		
 	public: // Basic and init.
 		gstr get_db_path() const;
 		void set_db_path(const gstr& path);
+		
+		bool get_is_memory() const;
+		void set_is_memory(bool value);
 		
 		bool get_auto_create() const;
 		void set_auto_create(bool value);
 		
 		void close();
+		bool open();
 		
 		gstr get_full_path() const;
 		
 		
 	public:
 		bool execute(const gstr& query, const Array& binds);
-		Ref<GLighterStmt> execute_stmt(const gstr& query, const Array& binds);
+		Ref<SQLStmt> execute_stmt(const gstr& query, const Array& binds);
 		
 		Dictionary query_row(const gstr& query, const Array& binds);
 		Array query_row_numeric(const gstr& query, const Array& binds);
@@ -62,22 +62,22 @@ namespace godot
 		int count_rows(const gstr& table_name);
 		
 	public: // Transactions.
-		bool begin() const;
-		bool commit() const;
-		bool rollback() const;
+		bool begin();
+		bool commit();
+		bool rollback();
 		
-		bool reindex(const gstr& element) const;
-		bool reindex_in(const gstr& scheme, const gstr& element) const;
+		bool reindex(const gstr& element);
+		bool reindex_in(const gstr& scheme, const gstr& element);
 		
 		
 	public: // SQLs
-		Ref<SQLDirect>		direct() const;
-		Ref<SQLSelect>		select() const;
-		Ref<SQLInsert>		insert() const;
-		Ref<SQLUpdate>		update() const;
-		Ref<SQLDelete>		del() const;
-		Ref<SQLCreateTable>	create_table() const;
-		Ref<SQLDrop>		drop() const;
+		Ref<SQLDirect>		direct();
+		Ref<SQLSelect>		select();
+		Ref<SQLInsert>		insert();
+		Ref<SQLUpdate>		update();
+		Ref<SQLDelete>		del();
+		Ref<SQLCreateTable>	create_table();
+		Ref<SQLDrop>		drop();
 	};
 }
 

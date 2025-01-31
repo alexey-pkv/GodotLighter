@@ -27,7 +27,7 @@ Array SQLCommand::binds() const
 	return val2var(get_cmd()->bind());
 }
 
-Ref<GLighterStmt> SQLCommand::execute()
+Ref<SQLStmt> SQLCommand::execute()
 {
 	return GLighter::try_stmt_action([&] { return get_cmd()->execute(); });
 }

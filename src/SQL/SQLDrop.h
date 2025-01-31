@@ -34,6 +34,7 @@ namespace godot
 		
 		
 	public: // Internals
+		inline void init() {};
 		void init(sqlighter::CMDDrop&& cmd);
 	};
 }

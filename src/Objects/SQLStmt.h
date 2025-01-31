@@ -1,24 +1,23 @@
-#ifndef GODOTLIGHTER_GLIGHTERSTMT_H
-#define GODOTLIGHTER_GLIGHTERSTMT_H
+#ifndef GODOTLIGHTER_SQLSTMT_H
+#define GODOTLIGHTER_SQLSTMT_H
 
-
-#include "Utils/types.h"
-#include "Utils/gd_class.h"
 
 #include <sqlighter.h>
 #include <godot_cpp/classes/ref_counted.hpp>
 
-#include "Exceptions/GLighterException.h"
+#include "Utils/types.h"
+#include "Utils/gd_class.h"
+#include "Objects/SQLErrorInfo.h"
 
 
 namespace godot
 {
-	class GLighterStmt : public RefCounted
+	class SQLStmt : public RefCounted
 	{
-		AS_GD_CLASS(GLighterStmt, RefCounted)
+		AS_GD_CLASS(SQLStmt, RefCounted)
 	private:
 		stmt 					m_stmt;
-		Ref<GLighterException>	m_error { nullptr };
+		Ref<SQLErrorInfo>	m_error {nullptr };
 		vec<gstr>				m_column_names {};
 		
 		
@@ -32,7 +31,7 @@ namespace godot
 		
 	public: // Error
 		bool is_failed();
-		Ref<GLighterException> get_err();
+		Ref<SQLErrorInfo> get_err();
 		
 		
 	public:
@@ -78,14 +77,14 @@ namespace godot
 		
 		
 	public: // Internal
-		inline void init_with(const Ref<GLighterException>& err) { m_error = err; }
+		inline void init_with(const Ref<SQLErrorInfo>& err) { m_error = err; }
 		inline void init_with(const excp& err) { m_error.instantiate(); m_error->set_err(err); }
 		inline void init_with(excp&& err) { m_error.instantiate(); m_error->set_err(std::move(err)); }
 		inline void init_with(stmt&& s) { m_stmt = std::move(s); }
 		
-		static Ref<GLighterStmt> from_error(const excp& err);
-		static Ref<GLighterStmt> from_error(const Ref<GLighterException>& err);
-		static Ref<GLighterStmt> from_stmt(stmt&& s);
+		static Ref<SQLStmt> from_error(const excp& err);
+		static Ref<SQLStmt> from_error(const Ref<SQLErrorInfo>& err);
+		static Ref<SQLStmt> from_stmt(stmt&& s);
 	};
 }
 

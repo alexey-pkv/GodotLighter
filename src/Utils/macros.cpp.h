@@ -67,12 +67,6 @@
 		return { this };																\
 	}
 
-#define CLAUSE_WHERE_BIND(class)																	\
-	ClassDB::bind_method(D_METHOD("where", "expression", "binds"),		&class::where);				\
-	ClassDB::bind_method(D_METHOD("where_null", "column"),				&class::where_null);		\
-	ClassDB::bind_method(D_METHOD("where_not_null", "column"),			&class::where_not_null);	\
-	ClassDB::bind_method(D_METHOD("by_field", "column", "value"),		&class::by_field);
-
 #define CLAUSE_ORDER_BY_IMPL(class)													\
 	Ref<class> class::order_by_exp(const gstr& exp, const Array& binds)				\
 	{                                              \

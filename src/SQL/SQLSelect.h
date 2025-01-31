@@ -25,10 +25,6 @@ namespace godot
 		const sqlighter::CMD* get_cmd() const override;
 		
 		
-	protected:
-		// sqlighter::CMDSelect& get_from_command() override;
-		
-		
 	public:
 		Ref<SQLSelect> distinct();
 		

@@ -4,8 +4,8 @@
 
 #include "Utils/types.h"
 #include "Utils/gd_class.h"
-#include "Exceptions/GLighterException.h"
-#include "Objects/GLighterStmt.h"
+#include "Objects/SQLStmt.h"
+#include "Objects/SQLErrorInfo.h"
 
 #include <godot_cpp/classes/object.hpp>
 
@@ -16,13 +16,13 @@ namespace godot
 	{
 		AS_GD_CLASS(GLighter, Object);	
 	private:
-		static Ref<GLighterException>	m_e;
+		static Ref<SQLErrorInfo>	m_e;
 		static bool						m_printErrors;
 		
 		
 	public:
 		static bool has_err();
-		static Ref<GLighterException> last_err();
+		static Ref<SQLErrorInfo> last_err();
 		static void reset_error();
 		static void set_print_errors(bool to);
 		
@@ -84,12 +84,12 @@ namespace godot
         {
             try
             {
-                return GLighterStmt::from_stmt(action());
+                return SQLStmt::from_stmt(action());
             }
             catch (const excp& e)
             {
                 handle_error(e);
-				return GLighterStmt::from_error(e);
+				return SQLStmt::from_error(e);
             }
         }
 	};
