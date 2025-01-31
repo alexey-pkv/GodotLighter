@@ -3,11 +3,22 @@
 
 #include "Utils/gd_path.h"
 
-#include "GLighter.h"
-
 
 using namespace godot;
 using namespace sqlighter;
+
+
+
+template<class CMD, class LCMD>
+static Ref<CMD> create_cmd(LCMD&& cmd, const Ref<SQLErrors>& errors)
+{
+	Ref<CMD> r;
+	
+	r.instantiate();
+	r->init(std::forward<LCMD>(cmd), errors);
+	
+	return r;
+}
 
 
 void SQLNode::_bind_methods()
@@ -30,6 +41,8 @@ void SQLNode::_bind_methods()
 	
 	ClassDB::bind_method(D_METHOD("execute", "query_string", "binds"),		&SQLNode::execute);
 	ClassDB::bind_method(D_METHOD("execute_stmt", "query_string", "binds"),	&SQLNode::execute_stmt);
+	
+	ClassDB::bind_method(D_METHOD("errors"), &SQLNode::errors);
 	
 	// Transaction
 	ClassDB::bind_method(D_METHOD("begin"),		&SQLNode::begin);
@@ -59,6 +72,24 @@ void SQLNode::_bind_methods()
 	ClassDB::bind_method(D_METHOD("delete"),		&SQLNode::del);
 	ClassDB::bind_method(D_METHOD("create_table"),	&SQLNode::create_table);
 	ClassDB::bind_method(D_METHOD("drop"),			&SQLNode::drop);
+	
+	ADD_SIGNAL(MethodInfo("on_error", PropertyInfo(Variant::OBJECT,	"error", PROPERTY_HINT_NODE_TYPE, "SQLErrorInfo")));
+	
+	ClassDB::bind_method(D_METHOD("handle_error"), &SQLNode::handle_error);
+}
+
+
+const Ref<SQLErrors>& SQLNode::errors_ref()
+{
+	if (m_errors == nullptr)
+	{
+		m_errors.instantiate();
+		m_errors->propagate_to_global();
+		m_errors->set_print_errors(false);
+		m_errors->connect("on_error", Callable(this, "handle_error"));
+	}
+	
+	return m_errors;
 }
 
 
@@ -80,7 +111,7 @@ bool SQLNode::open()
 	catch (const excp& e)
 	{
 		m_sql = nullptr;
-		GLighter::handle_error(e);
+		errors_ref()->handle_error(e);
 		return false;
 	}
 	
@@ -141,6 +172,16 @@ void SQLNode::close()
 	m_sql = nullptr;
 }
 
+Ref<SQLErrors> SQLNode::errors()
+{
+	return errors_ref();
+}
+
+void SQLNode::handle_error(const Ref<SQLErrorInfo>& e)
+{
+	emit_signal("on_error", e);
+}
+
 
 bool SQLNode::execute(const gstr& query, const Array& binds)
 {
@@ -151,7 +192,7 @@ Ref<SQLStmt> SQLNode::execute_stmt(const gstr& query, const Array& binds)
 {
 	if (!open())
 	{
-		return SQLStmt::from_error(GLighter::last_err());
+		return SQLStmt::from_error(errors_ref(), errors_ref()->last_err());
 	}
 	
 	auto query_str = str2str(query);
@@ -167,8 +208,9 @@ Ref<SQLStmt> SQLNode::execute_stmt(const gstr& query, const Array& binds)
 		
 		ee.query(query_str);
 		
-		GLighter::handle_error(ee);
-		return SQLStmt::from_error(ee);
+		errors_ref()->handle_error(ee);
+		
+		return SQLStmt::from_error(errors_ref(), ee);
 	}
 	
 	try
@@ -176,12 +218,12 @@ Ref<SQLStmt> SQLNode::execute_stmt(const gstr& query, const Array& binds)
 		auto cmd = m_sql->direct().append(query_str, binds_v);
 		auto res = cmd.execute();
 		
-		return SQLStmt::from_stmt(std::move(res));
+		return SQLStmt::from_stmt(errors_ref(), std::move(res));
 	}
 	catch (const excp& e)
 	{
-		GLighter::handle_error(e);
-		return SQLStmt::from_error(e);
+		errors_ref()->handle_error(e);
+		return SQLStmt::from_error(errors_ref(), e);
 	}
 }
 
@@ -230,7 +272,10 @@ Array SQLNode::query_column_all_max(const gstr& query, const Array& binds, int f
 
 int SQLNode::count_rows(const gstr& table_name)
 {
-	return GLighter::try_action(
+	if (!open())
+		return 0;
+	
+	return errors_ref()->try_action(
 		[&] { return m_sql->count_rows(str2str(table_name)); }, 
 		0);
 }
@@ -240,7 +285,7 @@ bool SQLNode::begin()
 	if (!open())
 		return false;
 	
-	return GLighter::try_action_bool([&] { m_sql->begin(); });
+	return errors_ref()->try_action_bool([&] { m_sql->begin(); });
 }
 
 bool SQLNode::commit()
@@ -248,7 +293,7 @@ bool SQLNode::commit()
 	if (!open())
 		return false;
 	
-	return GLighter::try_action_bool([&] { m_sql->commit(); });
+	return errors_ref()->try_action_bool([&] { m_sql->commit(); });
 }
 
 bool SQLNode::rollback()
@@ -256,7 +301,7 @@ bool SQLNode::rollback()
 	if (!open())
 		return false;
 	
-	return GLighter::try_action_bool([&] { m_sql->rollback(); });
+	return errors_ref()->try_action_bool([&] { m_sql->rollback(); });
 }
 
 bool SQLNode::reindex(const gstr& element)
@@ -264,7 +309,7 @@ bool SQLNode::reindex(const gstr& element)
 	if (!open())
 		return false;
 	
-	return GLighter::try_action_bool(
+	return errors_ref()->try_action_bool(
 		[&] { m_sql->reindex(str2str(element)); });
 }
 
@@ -273,41 +318,63 @@ bool SQLNode::reindex_in(const gstr& scheme, const gstr& element)
 	if (!open())
 		return false;
 	
-	return GLighter::try_action_bool(
+	return errors_ref()->try_action_bool(
 		[&] { m_sql->reindex(str2str(scheme), str2str(element)); });
 }
 
+
 Ref<SQLDirect> SQLNode::direct()
 {
-	return make_ref<SQLDirect>(std::move(m_sql->direct()));
+	if (!open())
+		return nullptr;
+	
+	return create_cmd<SQLDirect>(std::move(m_sql->direct()), errors_ref());
 }
 
 Ref<SQLDelete> SQLNode::del()
 {
-	return make_ref<SQLDelete>(std::move(m_sql->del()));
+	if (!open())
+		return nullptr;
+	
+	return create_cmd<SQLDelete>(std::move(m_sql->del()), errors_ref());
 }
 
 Ref<SQLSelect> SQLNode::select()
 {
-	return make_ref<SQLSelect>(std::move(m_sql->select()));
+	if (!open())
+		return nullptr;
+	
+	return create_cmd<SQLSelect>(std::move(m_sql->select()), errors_ref());
 }
 
 Ref<SQLInsert> SQLNode::insert()
 {
-	return make_ref<SQLInsert>(std::move(m_sql->insert()));
+	if (!open())
+		return nullptr;
+	
+	return create_cmd<SQLInsert>(std::move(m_sql->insert()), errors_ref());
 }
 
 Ref<SQLUpdate> SQLNode::update()
 {
-	return make_ref<SQLUpdate>(std::move(m_sql->update()));
+	if (!open())
+		return nullptr;
+	
+	return create_cmd<SQLUpdate>(std::move(m_sql->update()), errors_ref());
 }
 
 Ref<SQLCreateTable> SQLNode::create_table()
 {
-	return make_ref<SQLCreateTable>(std::move(m_sql->create()));
+	if (!open())
+		return nullptr;
+	
+	return create_cmd<SQLCreateTable>(std::move(m_sql->create()), errors_ref());
 }
 
 Ref<SQLDrop> SQLNode::drop()
 {
-	return make_ref<SQLDrop>(std::move(m_sql->drop()));
+	if (!open())
+		return nullptr;
+	
+	return create_cmd<SQLDrop>(std::move(m_sql->drop()), errors_ref());
 }

@@ -52,7 +52,8 @@ bool SQLCreateTable::create()
 sqlighter::CMD* SQLCreateTable::get_cmd() { return m_cmd.get(); }
 const sqlighter::CMD* SQLCreateTable::get_cmd() const { return m_cmd.get(); }
 
-void SQLCreateTable::init(CMDCreateTable&& cmd)
+void SQLCreateTable::init(CMDCreateTable&& cmd, const Ref<SQLErrors>& errors)
 {
 	m_cmd = std::make_unique<sqlighter::CMDCreateTable>(std::move(cmd));
+	init_errors(errors);
 }

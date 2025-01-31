@@ -36,9 +36,10 @@ CMD* SQLDrop::get_cmd() { return m_cmd.get(); }
 const CMD* SQLDrop::get_cmd() const { return m_cmd.get(); };
 
 
-void SQLDrop::init(CMDDrop&& cmd)
+void SQLDrop::init(CMDDrop&& cmd, const Ref<SQLErrors>& errors)
 {
 	m_cmd = std::make_unique<sqlighter::CMDDrop>(std::move(cmd));
+	init_errors(errors);
 }
 
 

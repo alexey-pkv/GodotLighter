@@ -26,7 +26,7 @@ namespace godot
 		
 		
 	public: // Internals
-		void init(sqlighter::CMDDirect&& cmd);
+		void init(sqlighter::CMDDirect&& cmd, const Ref<SQLErrors>& errors);
 	};
 }
 

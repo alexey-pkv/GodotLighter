@@ -19,11 +19,13 @@ namespace godot
 		
 		
 	public:
-		int err_code() const;
+		gstr error() const;
+		int code() const;
+		
+		gstr err_additional_message() const;
+		gstr err_lighter_str() const;
 		int err_sqlite_code() const;
-		gstr err_str() const;
-		gstr err_lighter_message() const;
-		gstr err_sqlite_message() const;
+		gstr err_sqlite_str() const;
 		gstr err_query() const;
 		
 		

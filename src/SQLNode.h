@@ -5,6 +5,7 @@
 #include "Utils/types.h"
 #include "Utils/gd_class.h"
 #include "Objects/SQLStmt.h"
+#include "Objects/SQLErrors.h"
 
 #include "SQL/SQLDrop.h"
 #include "SQL/SQLDirect.h"
@@ -25,9 +26,14 @@ namespace godot
 		AS_GD_CLASS(SQLNode, Node);
 	private:
 		uptr<sqlighter::SQLighter>	m_sql { nullptr };
+		Ref<SQLErrors>				m_errors { nullptr };
 		
 		gstr m_path			{};
 		bool m_autoCreate	{ false };
+		
+		
+	private:
+		const Ref<SQLErrors>& errors_ref();
 		
 		
 	public: // Basic and init.
@@ -45,6 +51,9 @@ namespace godot
 		
 		gstr get_full_path() const;
 		
+		Ref<SQLErrors> errors();
+		void handle_error(const Ref<SQLErrorInfo>& e);
+		
 		
 	public:
 		bool execute(const gstr& query, const Array& binds);
@@ -60,6 +69,7 @@ namespace godot
 		Array query_column_all_max(const gstr& query, const Array& binds, int failsafeLimit);
 		
 		int count_rows(const gstr& table_name);
+		
 		
 	public: // Transactions.
 		bool begin();

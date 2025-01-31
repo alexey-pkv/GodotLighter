@@ -32,7 +32,7 @@ namespace godot
 		
 		
 	public: // Internals
-		void init(sqlighter::CMDCreateTable&& cmd);
+		void init(sqlighter::CMDCreateTable&& cmd, const Ref<SQLErrors>& errors);
 	};
 }
 

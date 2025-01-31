@@ -33,7 +33,7 @@ namespace godot
 		
 		
 	public: // Internals
-		void init(sqlighter::CMDDelete&& cmd);
+		void init(sqlighter::CMDDelete&& cmd, const Ref<SQLErrors>& errors);
 	};
 }
 

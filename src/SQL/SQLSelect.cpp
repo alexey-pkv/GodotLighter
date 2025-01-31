@@ -45,9 +45,10 @@ void SQLSelect::_bind_methods()
 CMD* SQLSelect::get_cmd() { return m_cmd.get(); }
 const CMD* SQLSelect::get_cmd() const { return m_cmd.get(); };
 
-void SQLSelect::init(CMDSelect&& cmd)
+void SQLSelect::init(CMDSelect&& cmd, const Ref<SQLErrors>& errors)
 {
 	m_cmd = std::make_unique<sqlighter::CMDSelect>(std::move(cmd));
+	init_errors(errors);
 }
 
 
@@ -59,7 +60,7 @@ Ref<SQLSelect> SQLSelect::distinct()
 
 Ref<SQLSelect> SQLSelect::column_exp(const gstr& expression, const Array& binds)
 {
-	godot::GLighter::try_action([&] 
+	try_action([&] 
 	{
 		m_cmd->column_exp(str2str(expression), var2val(binds));
 	});
@@ -85,11 +86,12 @@ Ref<SQLSelect> SQLSelect::columns(const Array& columns)
 	{
 		if (columns[i].get_type() != Variant::STRING)
 		{
-			column_name_not_a_string_error(columns[i], i);
-			return { this }; 
+			handle_error(column_name_not_a_string_error(columns[i], i));
 		}
-		
-		m_cmd->column(str2str(columns[i]));
+		else
+		{
+			m_cmd->column(str2str(columns[i]));
+		}
 	}
 	
 	return { this };

@@ -31,67 +31,67 @@
 
 #define CLAUSE_SET_IMPL(class)														\
 	Ref<class> class::set_exp(const gstr& expression, const Array& binds)	 		\
-	{                                          \
-		godot::GLighter::try_action([&] { m_cmd->set_exp(str2str(expression), var2val(binds)); }); \
+	{																				\
+		try_action([&] { m_cmd->set_exp(str2str(expression), var2val(binds)); });	\
 		return { this };															\
 	}																				\
 																					\
 	Ref<class> class::set(const gstr& field, const Variant& value)					\
 	{																				\
-		godot::GLighter::try_action([&] { m_cmd->set(str2str(field), var2val_unsafe(value)); });	\
+		try_action([&] { m_cmd->set(str2str(field), var2val_unsafe(value)); });		\
 		return { this };															\
 	}
 
 #define CLAUSE_WHERE_IMPL(class)														\
 	Ref<class> class::where(const gstr& expression, const Array& binds)					\
-	{                                            \
-		godot::GLighter::try_action([&] { m_cmd->where(str2str(expression), var2val(binds)); });	\
+	{																					\
+		try_action([&] { m_cmd->where(str2str(expression), var2val(binds)); });			\
 		return { this };																\
 	}																					\
 																						\
 	Ref<class> class::where_null(const gstr& column)									\
-	{                                            \
-        godot::GLighter::try_action([&] { m_cmd->where_null(str2str(column)); });	\
+	{																					\
+		try_action([&] { m_cmd->where_null(str2str(column)); });						\
 		return { this };																\
 	}																					\
 																						\
 	Ref<class> class::where_not_null(const gstr& column)								\
 	{																					\
-        godot::GLighter::try_action([&] { m_cmd->where_not_null(str2str(column)); });	\
+		try_action([&] { m_cmd->where_not_null(str2str(column)); });					\
 		return { this };																\
 	}																					\
 																						\
 	Ref<class> class::by_field(const gstr& column, const Variant& value)				\
 	{																					\
-        godot::GLighter::try_action([&] { m_cmd->by_field(str2str(column), var2val_unsafe(value)); });	\
+		try_action([&] { m_cmd->by_field(str2str(column), var2val_unsafe(value)); });	\
 		return { this };																\
 	}
 
 #define CLAUSE_ORDER_BY_IMPL(class)													\
 	Ref<class> class::order_by_exp(const gstr& exp, const Array& binds)				\
-	{                                              \
-		godot::GLighter::try_action([&] { m_cmd->order_by(str2str(exp), var2val(binds)); }); \
+	{																				\
+		try_action([&] { m_cmd->order_by(str2str(exp), var2val(binds)); });			\
 		return { this };															\
 	}																				\
 																					\
 	Ref<class> class::order_by_field(const gstr& field, bool asc)					\
 	{																				\
 		auto order = asc ? OrderBy::ASC : OrderBy::DESC;							\
-                                                \
-		godot::GLighter::try_action([&] { m_cmd->order_by_field(str2str(field), order); }); \
+												\
+		try_action([&] { m_cmd->order_by_field(str2str(field), order); }); \
 																					\
 		return { this };															\
 	}																				\
 																					\
 	Ref<class> class::order_by_field_asc(const gstr& field)							\
 	{																				\
-        godot::GLighter::try_action([&] { m_cmd->order_by_field(str2str(field), OrderBy::ASC); } );        \
+		try_action([&] { m_cmd->order_by_field(str2str(field), OrderBy::ASC); } );	\
 		return { this };															\
 	}																				\
 																					\
 	Ref<class> class::order_by_field_desc(const gstr& field)						\
-	{                                              \
-		godot::GLighter::try_action([&] { m_cmd->order_by_field(str2str(field), OrderBy::DESC); } ); \
+	{																				\
+		try_action([&] { m_cmd->order_by_field(str2str(field), OrderBy::DESC); } ); \
 		return { this };															\
 	}
 
@@ -113,7 +113,6 @@
 		m_cmd->page(page, page_size);					\
 		return { this };								\
 	}
-
 
 
 #endif

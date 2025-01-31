@@ -22,6 +22,7 @@ void godot::initialize_godotlighter_module(ModuleInitializationLevel p_level)
 	}
 	
 	
+	ClassDB::register_abstract_class<SQLErrors>();
 	ClassDB::register_class<SQLErrorInfo>();
 	ClassDB::register_class<SQLStmt>();
 	

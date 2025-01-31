@@ -7,6 +7,7 @@
 
 #include "Utils/types.h"
 #include "Utils/gd_class.h"
+#include "Objects/SQLErrors.h"
 #include "Objects/SQLErrorInfo.h"
 
 
@@ -16,9 +17,10 @@ namespace godot
 	{
 		AS_GD_CLASS(SQLStmt, RefCounted)
 	private:
-		stmt 					m_stmt;
-		Ref<SQLErrorInfo>	m_error {nullptr };
-		vec<gstr>				m_column_names {};
+		stmt 				m_stmt;
+		Ref<SQLErrorInfo>	m_error { nullptr };
+		Ref<SQLErrors>		m_errors { nullptr };
+		vec<gstr>			m_column_names {};
 		
 		
 	private:
@@ -28,6 +30,7 @@ namespace godot
 		void handle_error(const sqlighter::SQLighterException& e);
 		void handle_error(sqlighter::SQLighterException&& e);
 		void store_column_names();
+		
 		
 	public: // Error
 		bool is_failed();
@@ -77,14 +80,9 @@ namespace godot
 		
 		
 	public: // Internal
-		inline void init_with(const Ref<SQLErrorInfo>& err) { m_error = err; }
-		inline void init_with(const excp& err) { m_error.instantiate(); m_error->set_err(err); }
-		inline void init_with(excp&& err) { m_error.instantiate(); m_error->set_err(std::move(err)); }
-		inline void init_with(stmt&& s) { m_stmt = std::move(s); }
-		
-		static Ref<SQLStmt> from_error(const excp& err);
-		static Ref<SQLStmt> from_error(const Ref<SQLErrorInfo>& err);
-		static Ref<SQLStmt> from_stmt(stmt&& s);
+		static Ref<SQLStmt> from_error(const Ref<SQLErrors>& errors, const excp& err);
+		static Ref<SQLStmt> from_error(const Ref<SQLErrors>& errors, const Ref<SQLErrorInfo>& err);
+		static Ref<SQLStmt> from_stmt(const Ref<SQLErrors>& errors, stmt&& s);
 	};
 }
 

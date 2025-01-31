@@ -17,6 +17,19 @@ void SQLCommand::_bind_methods()
 }
 
 
+void SQLCommand::handle_error(const excp& e)
+{
+	if (m_errors != nullptr)
+	{
+		m_errors->handle_error(e);
+	}
+	else
+	{
+		GLighter::handle_error(e);
+	}
+}
+
+
 gstr SQLCommand::assemble() const
 {
 	return str2str(get_cmd()->assemble());
@@ -29,5 +42,5 @@ Array SQLCommand::binds() const
 
 Ref<SQLStmt> SQLCommand::execute()
 {
-	return GLighter::try_stmt_action([&] { return get_cmd()->execute(); });
+	return try_stmt_action([&] { return get_cmd()->execute(); });
 }

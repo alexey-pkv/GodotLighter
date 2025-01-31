@@ -29,9 +29,10 @@ void SQLDelete::_bind_methods()
 CMD* SQLDelete::get_cmd() { return m_cmd.get(); }
 const CMD* SQLDelete::get_cmd() const { return m_cmd.get(); };
 
-void SQLDelete::init(CMDDelete&& cmd)
+void SQLDelete::init(CMDDelete&& cmd, const Ref<SQLErrors>& errors)
 {
 	m_cmd = std::make_unique<sqlighter::CMDDelete>(std::move(cmd));
+	init_errors(errors);
 }
 
 

@@ -10,7 +10,7 @@
 using namespace godot;
 
 
-void godot::column_name_not_a_string_error(const Variant& value, int at)
+excp godot::column_name_not_a_string_error(const Variant& value, int at)
 {
 	std::ostringstream ss {};
 	auto type = value.get_type();
@@ -20,10 +20,10 @@ void godot::column_name_not_a_string_error(const Variant& value, int at)
 		<< "A column at index [" << at << "] is not a string. " 
 		<< "Got `" << str2str(name) << "` instead";
 	
-	GLighter::handle_error(excp(SQLIGHTER_ERR_VALUE, ss.str()));
+	return { SQLIGHTER_ERR_VALUE, ss.str() };
 }
 
-void godot::expecting_array_error(const Variant& value, int at)
+excp godot::expecting_array_error(const Variant& value, int at)
 {
 	std::ostringstream ss {};
 	auto type = value.get_type();
@@ -33,6 +33,6 @@ void godot::expecting_array_error(const Variant& value, int at)
 		<< "Expecting an array at index [" << at << "]. " 
 		<< "Got `" << str2str(name) << "` instead";
 	
-	GLighter::handle_error(excp(SQLIGHTER_ERR_VALUE, ss.str()));
+	return { SQLIGHTER_ERR_VALUE, ss.str() };
 }
 

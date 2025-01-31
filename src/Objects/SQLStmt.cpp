@@ -64,6 +64,9 @@ void SQLStmt::_bind_methods()
 	ClassDB::bind_method(D_METHOD("query_string"),	&SQLStmt::query_string);
 	ClassDB::bind_method(D_METHOD("step"),			&SQLStmt::step);
 	ClassDB::bind_method(D_METHOD("close"),			&SQLStmt::close);
+	
+	ClassDB::bind_method(D_METHOD("has_error_info"),	&SQLStmt::is_failed);
+	ClassDB::bind_method(D_METHOD("error_info"),		&SQLStmt::get_err);
 }
 
 
@@ -105,14 +108,32 @@ void SQLStmt::number_of_columns_and_rows_error()
 
 void SQLStmt::handle_error(const excp& e)
 {
-	GLighter::handle_error(e);
-	init_with(e);
+	if (m_errors != nullptr)
+	{
+		m_errors->handle_error(e);
+	}
+	else
+	{
+		GLighter::handle_error(e);
+	}
+	
+	m_error.instantiate();
+	m_error->set_err(e); 
 }
 
 void SQLStmt::handle_error(excp&& e)
 {
-	GLighter::handle_error(e);
-	init_with(std::move(e));
+	if (m_errors != nullptr)
+	{
+		m_errors->handle_error(e);
+	}
+	else
+	{
+		GLighter::handle_error(e);
+	}
+	
+	m_error.instantiate(); 
+	m_error->set_err(std::move(e));
 }
 
 void SQLStmt::store_column_names()
@@ -136,8 +157,8 @@ Ref<SQLErrorInfo> SQLStmt::get_err() { return m_error; }
 
 int SQLStmt::code() const			{ return m_stmt.code(); }
 bool SQLStmt::is_done() const		{ return m_stmt.is_done(); }
-bool SQLStmt::is_ok() const		{ return m_stmt.is_ok(); }
-bool SQLStmt::is_error() const 	{ return m_stmt.is_error(); }
+bool SQLStmt::is_ok() const			{ return m_stmt.is_ok(); }
+bool SQLStmt::is_error() const	 	{ return m_stmt.is_error(); }
 bool SQLStmt::has_row() const		{ return m_stmt.has_row(); }
 gstr SQLStmt::query_string() const	{ return str2str(m_stmt.query()); }
 
@@ -402,29 +423,33 @@ Array SQLStmt::column_names()
 	return result;
 }
 
-Ref<SQLStmt> SQLStmt::from_error(const excp& err)
+Ref<SQLStmt> SQLStmt::from_error(const Ref<SQLErrors>& errors, const excp& err)
 {
 	auto res = make_ref<SQLStmt>();
 	
-	res->init_with(err);
+	res->m_errors = errors;
+	res->m_error.instantiate();
+	res->m_error->set_err(err);
 	
 	return res;
 }
 
-Ref<SQLStmt> SQLStmt::from_error(const Ref<SQLErrorInfo>& err)
+Ref<SQLStmt> SQLStmt::from_error(const Ref<SQLErrors>& errors, const Ref<SQLErrorInfo>& err)
 {
 	auto res = make_ref<SQLStmt>();
 	
-	res->init_with(err);
+	res->m_errors = errors;
+	res->m_error = err;
 	
 	return res;
 }
 
-Ref<SQLStmt> SQLStmt::from_stmt(stmt&& s)
+Ref<SQLStmt> SQLStmt::from_stmt(const Ref<SQLErrors>& errors, stmt&& s)
 {
 	auto res = make_ref<SQLStmt>();
 	
-	res->init_with(std::move(s));
+	res->m_stmt		= std::move(s);
+	res->m_errors	= errors;
 	
 	return res;
 }

@@ -18,9 +18,10 @@ void SQLDirect::_bind_methods()
 sqlighter::CMD* SQLDirect::get_cmd() { return m_cmd.get(); }
 const sqlighter::CMD* SQLDirect::get_cmd() const { return m_cmd.get(); };
 
-void SQLDirect::init(sqlighter::CMDDirect&& cmd)
+void SQLDirect::init(sqlighter::CMDDirect&& cmd, const Ref<SQLErrors>& errors)
 {
 	m_cmd = std::make_unique<sqlighter::CMDDirect>(std::move(cmd));
+	init_errors(errors);
 }
 
 Ref<SQLDirect> SQLDirect::append(const gstr& query, const Array& binds)
@@ -34,7 +35,7 @@ Ref<SQLDirect> SQLDirect::append(const gstr& query, const Array& binds)
 	}
 	catch (const excp& e)
 	{
-		GLighter::handle_error(e);
+		handle_error(e);
 	}
 	
 	return { this };

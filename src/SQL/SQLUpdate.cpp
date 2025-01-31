@@ -32,9 +32,10 @@ void SQLUpdate::_bind_methods()
 CMD* SQLUpdate::get_cmd() { return m_cmd.get(); }
 const CMD* SQLUpdate::get_cmd() const { return m_cmd.get(); };
 
-void SQLUpdate::init(CMDUpdate&& cmd)
+void SQLUpdate::init(CMDUpdate&& cmd, const Ref<SQLErrors>& errors)
 {
 	m_cmd = std::make_unique<sqlighter::CMDUpdate>(std::move(cmd));
+	init_errors(errors);
 }
 
 

@@ -52,7 +52,7 @@ namespace godot
 		
 		
 	public: // Internals
-		void init(sqlighter::CMDSelect&& cmd);
+		void init(sqlighter::CMDSelect&& cmd, const Ref<SQLErrors>& errors);
 	};
 }
 

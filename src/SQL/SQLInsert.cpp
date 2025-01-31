@@ -40,9 +40,10 @@ void SQLInsert::_bind_methods()
 CMD* SQLInsert::get_cmd() { return m_cmd.get(); }
 const CMD* SQLInsert::get_cmd() const { return m_cmd.get(); };
 
-void SQLInsert::init(CMDInsert&& cmd)
+void SQLInsert::init(CMDInsert&& cmd, const Ref<SQLErrors>& errors)
 {
 	m_cmd = std::make_unique<sqlighter::CMDInsert>(std::move(cmd));
+	init_errors(errors);
 }
 
 
@@ -99,21 +100,20 @@ Ref<SQLInsert> SQLInsert::columns(const Array& names)
 	{
 		if (names[i].get_type() != Variant::STRING)
 		{
-			column_name_not_a_string_error(names[i], i);
-			continue;
+			handle_error(column_name_not_a_string_error(names[i], i));
 		}
-		
-		m_cmd->column(str2str(names[i]));
+		else
+		{
+			m_cmd->column(str2str(names[i]));
+		}
 	}
-	
 	
 	return { this };
 }
 
 Ref<SQLInsert> SQLInsert::record(const Array& values)
 {
-	godot::GLighter::try_action([&] { m_cmd->record(var2val(values)); });
-	
+	try_action([&] { m_cmd->record(var2val(values)); });
 	return { this };
 }
 
