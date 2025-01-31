@@ -28,7 +28,7 @@ namespace godot
 		uptr<sqlighter::SQLighter>	m_sql { nullptr };
 		Ref<SQLErrors>				m_errors { nullptr };
 		
-		gstr m_path			{};
+		gstr m_path			{ ":memory:" };
 		bool m_autoCreate	{ false };
 		
 		

@@ -23,7 +23,7 @@ void SQLErrors::_bind_methods()
 
 bool SQLErrors::has_err() const
 {
-	return m_e == nullptr;
+	return m_e != nullptr;
 }
 
 Ref<SQLErrorInfo> SQLErrors::last_err() const

@@ -73,7 +73,10 @@ void SQLNode::_bind_methods()
 	ClassDB::bind_method(D_METHOD("create_table"),	&SQLNode::create_table);
 	ClassDB::bind_method(D_METHOD("drop"),			&SQLNode::drop);
 	
-	ADD_SIGNAL(MethodInfo("on_error", PropertyInfo(Variant::OBJECT,	"error", PROPERTY_HINT_NODE_TYPE, "SQLErrorInfo")));
+	ADD_SIGNAL(MethodInfo("on_error",
+		PropertyInfo(
+			Variant::OBJECT, "error",
+			PROPERTY_HINT_NODE_TYPE, "SQLErrorInfo")));
 	
 	ClassDB::bind_method(D_METHOD("handle_error"), &SQLNode::handle_error);
 }
