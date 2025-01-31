@@ -11,7 +11,48 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_fu0mr")
 
-[node name="SQLNode" type="SQLNode" parent="."]
-db_path = "/:poop:"
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[connection signal="on_error" from="SQLNode" to="." method="_on_sql_node_on_error"]
+[node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer"]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+
+[node name="Labels" type="VBoxContainer" parent="CenterContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="SQLite" type="Label" parent="CenterContainer/HBoxContainer/Labels"]
+layout_mode = 2
+text = "SQLite:"
+horizontal_alignment = 2
+
+[node name="SQLighter" type="Label" parent="CenterContainer/HBoxContainer/Labels"]
+layout_mode = 2
+text = "SQLighter:"
+horizontal_alignment = 2
+
+[node name="GodotLighter" type="Label" parent="CenterContainer/HBoxContainer/Labels"]
+layout_mode = 2
+text = "GodotLighter:"
+horizontal_alignment = 2
+
+[node name="Values" type="VBoxContainer" parent="CenterContainer/HBoxContainer"]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+
+[node name="SQLite_value" type="Label" parent="CenterContainer/HBoxContainer/Values"]
+layout_mode = 2
+horizontal_alignment = 2
+
+[node name="SQLighter_value" type="Label" parent="CenterContainer/HBoxContainer/Values"]
+layout_mode = 2
+horizontal_alignment = 2
+
+[node name="GodotLighter_value" type="Label" parent="CenterContainer/HBoxContainer/Values"]
+layout_mode = 2
+horizontal_alignment = 2
