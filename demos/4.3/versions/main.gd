@@ -10,6 +10,8 @@ func _ready() -> void:
 	print("SQLighter    : " + GLighter.sqlighter_version())
 	print("SQLite       : " + GLighter.sqlite_version())
 	
+	var n = SQLSelect.new()
+	
 	# OR :
 	# print(GodotLighter.versions_info())
 	
