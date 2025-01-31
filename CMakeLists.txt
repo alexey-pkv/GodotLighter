@@ -123,6 +123,10 @@ target_link_libraries(godotlighter PRIVATE sqlite3)
 add_custom_command(
     TARGET godotlighter POST_BUILD
     COMMAND cp "${GODOTLIGHTER_BIN}/libgodotlighter.${GODOTLIGHTER_PLATFORM}.template_debug.x86_64.so" "${CMAKE_CURRENT_SOURCE_DIR}/demos/4.3/versions/bin"
+	COMMAND cp "${GODOTLIGHTER_BIN}/libgodotlighter.${GODOTLIGHTER_PLATFORM}.template_debug.x86_64.so" "${CMAKE_CURRENT_SOURCE_DIR}/demos/4.3/error_handling/bin"
+	
 	COMMAND cp "${GODOTLIGHTER_BIN}/godotlighter.gdextension" "${CMAKE_CURRENT_SOURCE_DIR}/demos/4.3/versions/bin"
+	COMMAND cp "${GODOTLIGHTER_BIN}/godotlighter.gdextension" "${CMAKE_CURRENT_SOURCE_DIR}/demos/4.3/error_handling/bin"
+	
     COMMENT "Copying file to each bin directory after build"
 )
