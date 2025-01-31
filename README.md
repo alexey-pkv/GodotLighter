@@ -1,4 +1,5 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+![GitHub Tag](https://img.shields.io/github/v/tag/alexey-pkv/GodotLighter?label=Version)
 
 # GodotLighter 
 
