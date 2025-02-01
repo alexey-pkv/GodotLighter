@@ -27,5 +27,6 @@ Godot SQLite plugin
 * [SQLNode](docs/SQLNode.md)
 
 ### Error Handling
+* TODO: How the library handles errors.
 * [SQLErrorInfo](docs/Objects/SQLErrorInfo.md)
 * [SQLErrors](docs/Objects/SQLErrors.md)

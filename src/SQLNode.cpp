@@ -27,9 +27,11 @@ void SQLNode::_bind_methods()
 	ClassDB::bind_method(D_METHOD("set_db_path", "path"),	&SQLNode::set_db_path);
 	ADD_PROPERTY(PropertyInfo(Variant::STRING, "db_path"), "set_db_path", "get_db_path");
 	
+	/* Remove for now.
 	ClassDB::bind_method(D_METHOD("get_auto_create"),					&SQLNode::get_auto_create);
 	ClassDB::bind_method(D_METHOD("set_auto_create", "auto_create"),	&SQLNode::set_auto_create);
 	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "auto_create"), "set_auto_create", "get_auto_create");
+	*/
 	
 	ClassDB::bind_method(D_METHOD("get_is_memory"),					&SQLNode::get_is_memory);
 	ClassDB::bind_method(D_METHOD("set_is_memory", "is_memory"),	&SQLNode::set_is_memory);
@@ -167,7 +169,10 @@ void SQLNode::set_is_memory(bool value)
 
 gstr SQLNode::get_full_path() const
 {
-	return str2str(to_path(m_path));
+	if (get_is_memory())
+		return m_path;
+	
+	return to_path_gstr(m_path);
 }
 
 void SQLNode::close()

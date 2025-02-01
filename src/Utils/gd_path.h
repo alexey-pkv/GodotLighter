@@ -18,6 +18,11 @@ namespace godot
 	{
 		return ProjectSettings::get_singleton()->globalize_path(str).utf8().get_data();
 	}
+	
+	inline gstr to_path_gstr(const gstr& str)
+	{
+		return ProjectSettings::get_singleton()->globalize_path(str);
+	}
 }
 
 
