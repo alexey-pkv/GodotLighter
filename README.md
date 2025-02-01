@@ -9,14 +9,22 @@ Godot SQLite plugin
 
 > Road map for version **v1.0.0**
 
+- [ ] Add documentation
+- [ ] Ensure that any existing statements are finalized when the DB connection is closed. 
 - [ ] Add JOIN, JOIN LEFT and JOIN RIGHT to the select constructor.  
 - [ ] Add support for SQLite3 Backup's.
 - [ ] Add basic migration tools.
+
+> Road map for version **v1.1.0**
+- [ ] Unit tests? UNIT TESTS!
+- [ ] Add binding by name
 - [ ] Add the ability to create and reuse prepared statements.  
+- [ ] Make it thread safe.
 
 # References 
 
 * [GLighter](docs/GLighter.md)
+* [SQLNode](docs/SQLNode.md)
 
 ### Error Handling
 * [SQLErrorInfo](docs/Objects/SQLErrorInfo.md)
