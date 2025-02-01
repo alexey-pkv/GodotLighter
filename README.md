@@ -23,8 +23,8 @@ Godot SQLite plugin
 
 # References 
 
-* [GLighter](docs/GLighter.md)
-* [SQLNode](docs/SQLNode.md)
+* [GLighter](./docs/GLighter.md)
+* [SQLNode](./docs/SQLNode.md)
 
 ### Error Handling
 * TODO: How the library handles errors.
