@@ -4,6 +4,10 @@ extends Control
 @onready var sql: SQLNode  = $SQLNode
 
 
+func _ready() -> void:
+	print(sql.query_row_numeric("SELECT 1, ? as col_2, ? = '2' as hel", ["Hello", '2']))
+
+
 func handle_sql_error(error: SQLErrorInfo) -> void:
 	print("Error in SQLNode: ")
 	print(error.error())
@@ -15,6 +19,9 @@ func handle_run_commands_pressed() -> void:
 		.select() \
 		.from("NotATable") \
 		.execute()
+	
+	print("The list of all NPC's: ")
+	print(stmt.all())
 	
 	print("Let's check if sqlite3 error code indicates that the query field")
 	print("Is Failed: " + str(stmt.is_error()))

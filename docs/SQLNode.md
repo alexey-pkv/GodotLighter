@@ -120,77 +120,134 @@ This container stores the most recent error that occurred within the context of 
 
 ---
 
-### `query_row`
+### `query_row(query: String, binds: Array): Dictionary`  
+
+| Parameter  | Type    | Description                                         |
+|------------|--------|------------------------------------------------------|
+| `query`    | String | The SQL query to be executed.                        |
+| `binds`    | Array  | An array of values to bind to the query parameters.  |
+
+**Description**: Executes a query and returns the first record as a dictionary, where the key is the column name and the value is the selected value.  
+
+> If the query selects more than one row, only the first row is returned.  
+
+> If the query selects no rows at all, an empty dictionary will be returned, and an error is raised.
+
+**Example**:
+```
+print(sql.query_row("SELECT 1, ? as col_2, ? = '2' as hel", ["Hello", '2']))
+```
+will output
+```
+{ "1": 1, "col_2": "Hello", "hel": 1 }
+```
+
+--- 
+
+### `query_row_numeric(query: String, binds: Array): Array`
+
+| Parameter  | Type    | Description                                        |
+|------------|--------|-----------------------------------------------------|
+| `query`    | String | The SQL query to be executed.                       |
+| `binds`    | Array  | An array of values to bind to the query parameters. |
+
+**Description**: Similar behaviour to `query_row_numeric` but the returned result is an array contianing the values only. 
+
+**Example:**
+
+```
+print(sql.query_row_numeric("SELECT 1, ? as col_2, ? = '2' as hel", ["Hello", '2']))
+```
+will output
+```
+[1, "Hello", 1]
+```
+
+--- 
+
+### `query_all(query: String, binds: Array): Dictionary`
+
+| Parameter  | Type   | Description                                         |
+|------------|--------|-----------------------------------------------------|
+| `query`    | String | The SQL query to be executed.                       |
+| `binds`    | Array  | An array of values to bind to the query parameters. |
+
+--- 
+
+### `query_column_all(query: String, binds: Array): Array`
+
+| Parameter  | Type   | Description                                         |
+|------------|--------|-----------------------------------------------------|
+| `query`    | String | The SQL query to be executed.                       |
+| `binds`    | Array  | An array of values to bind to the query parameters. |
+
+--- 
+
+### `query_value(query: String, binds: Array): Variant`
+
+| Parameter  | Type   | Description                                         |
+|------------|--------|-----------------------------------------------------|
+| `query`    | String | The SQL query to be executed.                       |
+| `binds`    | Array  | An array of values to bind to the query parameters. |
+
+--- 
+
+### `query_all_max(query: String, binds: Array, failsafe: int): Array`
+
+| Parameter  | Type   | Description                                             |
+|------------|--------|---------------------------------------------------------|
+| `query`    | String | The SQL query to be executed.                           |
+| `binds`    | Array  | An array of values to bind to the query parameters.     |
+| `failsafe` | int    | The highest number of records expected to be retrieved. |
+
+--- 
+
+### `query_column_all_max(query: String, binds: Array, failsafe: int): Array`
+
+| Parameter  | Type   | Description                                             |
+|------------|--------|---------------------------------------------------------|
+| `query`    | String | The SQL query to be executed.                           |
+| `binds`    | Array  | An array of values to bind to the query parameters.     |
+| `failsafe` | int    | The highest number of records expected to be retrieved. |
+
+--- 
+
+### `count_rows(table_name: String): int`
+**Description**: Executes the query `SELECT COUNT(*) FROM {table_name}` and return the result as an integer
+
+--- 
+
+### `direct()`
 TODO: 
 
 --- 
 
-### `query_row_numeric`
+### `select()`
 TODO: 
 
 --- 
 
-### `query_all`
+### `insert()`
 TODO: 
 
 --- 
 
-### `query_column_all`
+### `update()`
 TODO: 
 
 --- 
 
-### `query_value`
+### `delete()`
 TODO: 
 
 --- 
 
-### `query_all_max`
+### `create_table()`
 TODO: 
 
 --- 
 
-### `query_column_all_max`
-TODO: 
-
---- 
-
-### `count_rows`
-TODO: 
-
---- 
-
-### `direct`
-TODO: 
-
---- 
-
-### `select`
-TODO: 
-
---- 
-
-### `insert`
-TODO: 
-
---- 
-
-### `update`
-TODO: 
-
---- 
-
-### `delete`
-TODO: 
-
---- 
-
-### `create_table`
-TODO: 
-
---- 
-
-### `drop`
+### `drop()`
 TODO: 
 
 ## Signals
