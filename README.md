@@ -21,6 +21,10 @@ Godot SQLite plugin
 - [ ] Add the ability to create and reuse prepared statements.  
 - [ ] Make it thread safe.
 
+> Road map for version **v1.2.0**
+- [ ] Basic Object to table Mapping 
+- [ ] Add callback functions support
+
 # References 
 
 * [GLighter](./docs/GLighter.md)

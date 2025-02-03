@@ -4,10 +4,6 @@ extends Control
 @onready var sql: SQLNode  = $SQLNode
 
 
-func _ready() -> void:
-	print(sql.query_row_numeric("SELECT 1, ? as col_2, ? = '2' as hel", ["Hello", '2']))
-
-
 func handle_sql_error(error: SQLErrorInfo) -> void:
 	print("Error in SQLNode: ")
 	print(error.error())

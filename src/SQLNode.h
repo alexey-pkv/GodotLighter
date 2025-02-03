@@ -36,6 +36,10 @@ namespace godot
 		const Ref<SQLErrors>& errors_ref();
 		
 		
+	public:
+		~SQLNode() override;
+		
+		
 	public: // Basic and init.
 		gstr get_db_path() const;
 		void set_db_path(const gstr& path);

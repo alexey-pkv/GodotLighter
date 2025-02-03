@@ -8,6 +8,11 @@ using namespace godot;
 using namespace sqlighter;
 
 
+SQLNode::~SQLNode()
+{
+	close();
+}
+
 
 template<class CMD, class LCMD>
 static Ref<CMD> create_cmd(LCMD&& cmd, const Ref<SQLErrors>& errors)
@@ -81,6 +86,26 @@ void SQLNode::_bind_methods()
 			PROPERTY_HINT_NODE_TYPE, "SQLErrorInfo")));
 	
 	ClassDB::bind_method(D_METHOD("handle_error"), &SQLNode::handle_error);
+	
+	ADD_SIGNAL(MethodInfo("before_open",
+		PropertyInfo(
+			Variant::OBJECT, "sql",
+			PROPERTY_HINT_NODE_TYPE, "SQLNode")));
+	
+	ADD_SIGNAL(MethodInfo("on_open",
+		PropertyInfo(
+			Variant::OBJECT, "sql",
+			PROPERTY_HINT_NODE_TYPE, "SQLNode")));
+	
+	ADD_SIGNAL(MethodInfo("before_close",
+		PropertyInfo(
+			Variant::OBJECT, "sql",
+			PROPERTY_HINT_NODE_TYPE, "SQLNode")));
+	
+	ADD_SIGNAL(MethodInfo("on_close",
+		PropertyInfo(
+			Variant::OBJECT, "sql",
+			PROPERTY_HINT_NODE_TYPE, "SQLNode")));
 }
 
 
@@ -102,6 +127,8 @@ bool SQLNode::open()
 {
 	if (m_sql != nullptr) return true;
 	
+	emit_signal("before_open", this);
+	
 	try
 	{
 		if (!get_is_memory())
@@ -112,6 +139,8 @@ bool SQLNode::open()
 		{
 			m_sql = std::make_unique<SQLighter>(str2str(m_path));
 		}
+		
+		m_sql->open();
 	}
 	catch (const excp& e)
 	{
@@ -119,6 +148,8 @@ bool SQLNode::open()
 		errors_ref()->handle_error(e);
 		return false;
 	}
+	
+	emit_signal("on_open", this);
 	
 	return true;
 }
@@ -177,6 +208,13 @@ gstr SQLNode::get_full_path() const
 
 void SQLNode::close()
 {
+	if (m_sql && m_sql->is_open())
+	{
+		emit_signal("before_close", this);
+		m_sql->close();
+		emit_signal("on_close", this);
+	}
+	
 	m_sql = nullptr;
 }
 
