@@ -172,6 +172,21 @@ will output
 | `query`    | String | The SQL query to be executed.                       |
 | `binds`    | Array  | An array of values to bind to the query parameters. |
 
+**Description**: Execute the query and return all the selected columns in a single array. If nothing is selected, an empty array is returned.
+
+> TODO: By default, if the query produces more than 10,000 records, the query will fail. That is provided as a failsafe mechanizm to avoid 
+> invalid quries eating up all the memory. If you want to spesify your own limit and expect more rows, use the `query_all_max` method instead
+
+**Example:**
+
+```
+print(sql.query_all("SELECT Name, Age FROM npcs WHERE Type = ? Order By Age", ['Robot']))
+```
+will output
+```
+[{"Name": "Bob", "Age": 22}, {"Name": "Zob", "Age": 25}, {"Name": "Rob", "Age": 28}, {"Name": "Grob", "Age": 33}]
+```
+
 --- 
 
 ### `query_column_all(query: String, binds: Array): Array`
@@ -181,6 +196,20 @@ will output
 | `query`    | String | The SQL query to be executed.                       |
 | `binds`    | Array  | An array of values to bind to the query parameters. |
 
+**Description**: Execute the query and only return the values of the first column of each record. 
+
+If the query produces more than one column, this will be considered an error.
+
+**Example:**
+
+```
+print(sql.query_column_all("SELECT Name FROM npcs WHERE Type = ? Order By Age", ['Robot']))
+```
+will output
+```
+["Bob", "Zob", "Rob", "Grob"]
+```
+
 --- 
 
 ### `query_value(query: String, binds: Array): Variant`
@@ -189,6 +218,19 @@ will output
 |------------|--------|-----------------------------------------------------|
 | `query`    | String | The SQL query to be executed.                       |
 | `binds`    | Array  | An array of values to bind to the query parameters. |
+
+**Description**: Execute the query and only return the value of the first column in the first row.
+
+If no records aare selected, null will be returned.
+
+**Example:**
+```
+print(sql.query_value("SELECT Name, Age FROM npcs WHERE Type = ? Order By Age", ['Robot']))
+```
+will output
+```
+"Bob"
+```
 
 --- 
 
@@ -200,6 +242,9 @@ will output
 | `binds`    | Array  | An array of values to bind to the query parameters.     |
 | `failsafe` | int    | The highest number of records expected to be retrieved. |
 
+**Description**: The behaciour of this method is exactly the same as `query_all`, but you can overide the 
+failsafe value. If more than `failsafe` records are selecteds the query will raise an error and return an empty set.
+
 --- 
 
 ### `query_column_all_max(query: String, binds: Array, failsafe: int): Array`
@@ -210,10 +255,26 @@ will output
 | `binds`    | Array  | An array of values to bind to the query parameters.     |
 | `failsafe` | int    | The highest number of records expected to be retrieved. |
 
+**Description**: The behaviour of this method is exactly the same as `query_column_all`, but you can overide the 
+failsafe value. If more than `failsafe` records are selected the query will raise an error and return an empty set.
+
 --- 
 
 ### `count_rows(table_name: String): int`
+
+| Parameter    | Type   | Description                          |
+|--------------|--------|--------------------------------------|
+| `table_name` | String | The table in which to count records. |
+
 **Description**: Executes the query `SELECT COUNT(*) FROM {table_name}` and return the result as an integer
+
+```
+print(sql.count_rows("npcs"))
+```
+will output
+```
+13
+```
 
 --- 
 
