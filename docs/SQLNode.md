@@ -48,6 +48,12 @@ If the specified database does not exist, a new one will be created.
 ### `close(): void`
 **Description**: Close any open connection. 
 
+
+### `delete_database(): bool`
+**Description**: Delete the database file. Any open connection will be closed.
+
+**Return**: True on success or if the file did not exist already. False if the path was a directory, or if the deletion failed.
+
 ---
 
 ### `execute(): bool`

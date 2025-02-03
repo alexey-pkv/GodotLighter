@@ -42,9 +42,10 @@ void SQLNode::_bind_methods()
 	ClassDB::bind_method(D_METHOD("set_is_memory", "is_memory"),	&SQLNode::set_is_memory);
 	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "in_memory"), "set_is_memory", "get_is_memory");
 	
-	ClassDB::bind_method(D_METHOD("get_full_path"),	&SQLNode::get_full_path);
-	ClassDB::bind_method(D_METHOD("open"),			&SQLNode::open);
-	ClassDB::bind_method(D_METHOD("close"),			&SQLNode::close);
+	ClassDB::bind_method(D_METHOD("get_full_path"),		&SQLNode::get_full_path);
+	ClassDB::bind_method(D_METHOD("open"),				&SQLNode::open);
+	ClassDB::bind_method(D_METHOD("close"),				&SQLNode::close);
+	ClassDB::bind_method(D_METHOD("delete_database"),	&SQLNode::delete_database);
 	
 	ClassDB::bind_method(D_METHOD("execute", "query_string", "binds"),		&SQLNode::execute);
 	ClassDB::bind_method(D_METHOD("execute_stmt", "query_string", "binds"),	&SQLNode::execute_stmt);
@@ -204,6 +205,39 @@ gstr SQLNode::get_full_path() const
 		return m_path;
 	
 	return to_path_gstr(m_path);
+}
+
+bool SQLNode::delete_database()
+{
+	close();
+	
+	if (get_is_memory())
+		return true;
+	
+	auto path = str2str(m_path);
+	
+	if (!std::filesystem::exists(path))
+		return true;
+	
+	if (!std::filesystem::is_regular_file(path))
+	{
+		auto message = "Failed to remove db file '" + path + "', not a file";
+		errors_ref()->handle_error(SQLighterException(SQLIGHTER_ERR_GENERIC, message));
+		return false;
+	}
+	
+	try
+	{
+		std::filesystem::remove(path);
+	}
+	catch (const std::exception& e)
+	{
+		auto message = "Failed to remove db file '" + path + "'. Error: " + e.what();
+		errors_ref()->handle_error(SQLighterException(SQLIGHTER_ERR_GENERIC, message));
+		return false;
+	}
+	
+	return true;
 }
 
 void SQLNode::close()

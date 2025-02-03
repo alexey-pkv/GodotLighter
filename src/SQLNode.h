@@ -40,7 +40,7 @@ namespace godot
 		~SQLNode() override;
 		
 		
-	public: // Basic and init.
+	public: // Basic and db control
 		gstr get_db_path() const;
 		void set_db_path(const gstr& path);
 		
@@ -54,6 +54,7 @@ namespace godot
 		bool open();
 		
 		gstr get_full_path() const;
+		bool delete_database();
 		
 		Ref<SQLErrors> errors();
 		void handle_error(const Ref<SQLErrorInfo>& e);
