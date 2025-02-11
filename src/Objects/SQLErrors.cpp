@@ -2,6 +2,7 @@
 
 
 #include "GLighter.h"
+#include <godot_cpp/classes/engine.hpp>
 
 
 using namespace godot;
@@ -15,7 +16,10 @@ void SQLErrors::_bind_methods()
 	
 	ClassDB::bind_method(D_METHOD("set_print_errors", "is_to_print"),	&SQLErrors::set_print_errors);
 	ClassDB::bind_method(D_METHOD("get_print_errors"),					&SQLErrors::get_print_errors);
+	
+	
 	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "print_errors"), "set_print_errors", "get_print_errors");
+	
 	
 	ADD_SIGNAL(MethodInfo("on_error", PropertyInfo(Variant::OBJECT, "error", PROPERTY_HINT_NODE_TYPE, "SQLErrorInfo")));
 }
@@ -52,7 +56,7 @@ void SQLErrors::handle_error_only(const sqlighter::SQLighterException& e)
 	m_e->set_err(e);
 	
 	// Print error only after it was set.
-	if (m_printErrors)
+	if (m_printErrors && !Engine::get_singleton()->is_editor_hint())
 	{
 		_err_print_error(__FUNCTION__, __FILE__, __LINE__, e.what(), true);
 	}

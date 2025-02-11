@@ -33,6 +33,7 @@ namespace godot
 	
 	inline gstr str2str(const std::ostringstream& ss) { return { ss.str().c_str() }; }
 	inline gstr str2str(std::string_view sv) { return { sv.data() }; }
+	inline gstr str2str(const char* c) { return { c }; }
 	inline gstr str2str(const str& s) { return { s.c_str() }; }
 	inline str str2str(const gstr& s) { return { s.utf8().get_data() }; }
 	

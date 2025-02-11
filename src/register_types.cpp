@@ -3,6 +3,7 @@
 
 #include "SQLNode.h"
 #include "GLighter.h"
+#include "Migration/SQLMigrationScript.h"
 
 
 #include <gdextension_interface.h>
@@ -36,6 +37,7 @@ void godot::initialize_godotlighter_module(ModuleInitializationLevel p_level)
 	ClassDB::register_abstract_class<SQLDrop>();
 	
 	ClassDB::register_class<SQLNode>();
+	ClassDB::register_class<SQLMigrationScript>();
 	ClassDB::register_abstract_class<GLighter>();
 }
 
