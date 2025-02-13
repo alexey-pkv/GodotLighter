@@ -7,6 +7,7 @@
 #include "Objects/SQLStmt.h"
 #include "Objects/SQLErrors.h"
 
+#include <godot_cpp/classes/engine.hpp>
 #include <godot_cpp/classes/object.hpp>
 
 
@@ -34,6 +35,16 @@ namespace godot
 		inline static void handle_error(const excp& e)
 		{
 			errors()->handle_error_only(e);
+		}
+		
+		inline static void generic_error(const char* message)
+		{
+			handle_error({ SQLIGHTER_ERR_GENERIC, message });
+		}
+		
+		inline static bool is_editor()
+		{
+			return Engine::get_singleton()->is_editor_hint();
 		}
 	};
 }

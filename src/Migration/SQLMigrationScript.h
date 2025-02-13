@@ -22,7 +22,6 @@ namespace godot
 		
 	private:
 		bool trigger_complete_event(bool result);
-		SQLNode* get_parent_sql_node() const;
 		bool validate_can_update(PackedStringArray& notes) const;
 		bool run_execute_for_node(SQLNode* node);
 		

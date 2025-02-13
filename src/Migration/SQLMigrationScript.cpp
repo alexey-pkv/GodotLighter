@@ -4,6 +4,7 @@
 #include "SQLNode.h"
 #include "GLighter.h"
 #include "Utils/types.h"
+#include "Utils/helpers.h"
 
 #include <sstream>
 
@@ -49,21 +50,6 @@ bool SQLMigrationScript::trigger_complete_event(bool result)
 	}
 	
 	return result;
-}
-
-SQLNode* SQLMigrationScript::get_parent_sql_node() const
-{
-	auto n = get_parent();
-	
-	while (n)
-	{
-		if (n->get_class() == "SQLNode")
-			return (SQLNode*)n;
-		
-		n = n->get_parent();
-	}
-	
-	return nullptr;
 }
 
 bool SQLMigrationScript::validate_can_update(PackedStringArray& notes) const
@@ -130,15 +116,15 @@ bool SQLMigrationScript::run_execute_for_node(SQLNode* node)
 		return trigger_complete_event(false);
 	}
 	
-	get_script().call(UPDATE_METHOD, node);
+	call(UPDATE_METHOD, node);
 	
-	return trigger_complete_event(GLighter::errors()->has_err());
+	return trigger_complete_event(!GLighter::errors()->has_err());
 }
 
 
 bool SQLMigrationScript::execute_update()
 {
-	auto node = get_parent_sql_node();
+	auto node = get_first_parent_by_class(this, "SQLNode");
 	
 	if (node == nullptr)
 	{
@@ -146,7 +132,7 @@ bool SQLMigrationScript::execute_update()
 		return trigger_complete_event(false);
 	}
 	
-	return run_execute_for_node(node);
+	return run_execute_for_node((SQLNode*)node);
 }
 
 bool SQLMigrationScript::execute_update_for(SQLNode* node)
