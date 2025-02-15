@@ -108,7 +108,7 @@ bool godot::var2val(const godot::Variant& var, BindValue& into)
 			return true;
 
 		case godot::Variant::Type::STRING:
-			into = { str2str((gstr)var) };
+			into = { str2view((gstr)var) };
 			return true;
 
 		case godot::Variant::Type::NIL:
@@ -134,7 +134,7 @@ BindValue godot::var2val_unsafe(const godot::Variant& var)
 			return (double)var;
 
 		case godot::Variant::Type::STRING:
-			return { str2str((gstr)var) };
+			return { str2view((gstr)var) };
 
 		case godot::Variant::Type::NIL:
 			return BindValue { BindValue::type::NULL_VAL };

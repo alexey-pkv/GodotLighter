@@ -36,6 +36,7 @@ namespace godot
 	inline gstr str2str(const char* c) { return { c }; }
 	inline gstr str2str(const str& s) { return { s.c_str() }; }
 	inline str str2str(const gstr& s) { return { s.utf8().get_data() }; }
+	inline std::string_view str2view(const gstr& s) { return { s.utf8().get_data() }; }
 	
 	template <typename T>
 	inline Ref<T> make_ref()

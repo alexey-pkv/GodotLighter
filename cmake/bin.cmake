@@ -1,0 +1,11 @@
+set(GODOTLIGHTER_BIN "${CMAKE_BINARY_DIR}/bin" CACHE INTERNAL "" FORCE)
+
+if (MSVC)
+	set(GODOTLIGHTER_OUT "${CMAKE_BINARY_DIR}/bin/Debug" CACHE INTERNAL "" FORCE)
+else ()
+	set(GODOTLIGHTER_OUT "${CMAKE_BINARY_DIR}/bin" CACHE INTERNAL "" FORCE)
+endif ()
+
+
+message(STATUS "GodotLighter Binary dir: ${GODOTLIGHTER_BIN}")
+message(STATUS "GodotLighter Output dir: ${GODOTLIGHTER_OUT}")
