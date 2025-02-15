@@ -25,7 +25,7 @@ include(FetchContent)
 FetchContent_Declare(
 	sqlighter
 	GIT_REPOSITORY	https://github.com/alexey-pkv/sqlighter.git
-	GIT_TAG			v0.1.6
+	GIT_TAG			v0.2.0
 )
 
 set(SQLIGHTER_BUILD_STATIC_LIBS ON)
@@ -120,13 +120,15 @@ target_link_libraries(godotlighter PRIVATE sqlite3)
 # add_dependencies(godotlighter godotlighter_build_godot_cpp)
 
 # TODO: Change, as currently this works only for linux and only for debug.
-add_custom_command(
-    TARGET godotlighter POST_BUILD
-    COMMAND cp "${GODOTLIGHTER_BIN}/libgodotlighter.${GODOTLIGHTER_PLATFORM}.template_debug.x86_64.so" "${CMAKE_CURRENT_SOURCE_DIR}/demos/4.3/versions/bin"
-	COMMAND cp "${GODOTLIGHTER_BIN}/libgodotlighter.${GODOTLIGHTER_PLATFORM}.template_debug.x86_64.so" "${CMAKE_CURRENT_SOURCE_DIR}/demos/4.3/error_handling/bin"
-	
-	COMMAND cp "${GODOTLIGHTER_BIN}/godotlighter.gdextension" "${CMAKE_CURRENT_SOURCE_DIR}/demos/4.3/versions/bin"
-	COMMAND cp "${GODOTLIGHTER_BIN}/godotlighter.gdextension" "${CMAKE_CURRENT_SOURCE_DIR}/demos/4.3/error_handling/bin"
-	
-    COMMENT "Copying file to each bin directory after build"
-)
+if (UNIX)
+	add_custom_command(
+		TARGET godotlighter POST_BUILD
+		COMMAND cp "${GODOTLIGHTER_BIN}/libgodotlighter.${GODOTLIGHTER_PLATFORM}.template_debug.x86_64.so" "${CMAKE_CURRENT_SOURCE_DIR}/demos/4.3/versions/bin"
+		COMMAND cp "${GODOTLIGHTER_BIN}/libgodotlighter.${GODOTLIGHTER_PLATFORM}.template_debug.x86_64.so" "${CMAKE_CURRENT_SOURCE_DIR}/demos/4.3/error_handling/bin"
+		
+		COMMAND cp "${GODOTLIGHTER_BIN}/godotlighter.gdextension" "${CMAKE_CURRENT_SOURCE_DIR}/demos/4.3/versions/bin"
+		COMMAND cp "${GODOTLIGHTER_BIN}/godotlighter.gdextension" "${CMAKE_CURRENT_SOURCE_DIR}/demos/4.3/error_handling/bin"
+		
+		COMMENT "Copying file to each bin directory after build"
+	)
+endif ()

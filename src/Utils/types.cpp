@@ -112,7 +112,7 @@ bool godot::var2val(const godot::Variant& var, BindValue& into)
 			return true;
 
 		case godot::Variant::Type::NIL:
-			into = BindValue::null;
+			into = BindValue { BindValue::type::NULL_VAL };
 			return true;
 		
 		default:
@@ -137,13 +137,13 @@ BindValue godot::var2val_unsafe(const godot::Variant& var)
 			return { str2str((gstr)var) };
 
 		case godot::Variant::Type::NIL:
-			return BindValue::null;
+			return BindValue { BindValue::type::NULL_VAL };
 		
 		default:
 			_throw_invalid_variant_type(var);
 	}
 	
-	return BindValue::null;
+	return BindValue { BindValue::type::NULL_VAL };
 }
 
 godot::vec<BindValue> godot::var2val(const godot::Array& vars)
