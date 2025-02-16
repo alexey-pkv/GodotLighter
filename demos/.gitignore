@@ -2,3 +2,4 @@
 */*/.godot
 */*/bin/*
 !*/*/bin/.keep
+*/tests/*

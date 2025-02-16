@@ -25,14 +25,14 @@ function(define_demo_target)
 			TARGET godotlighter POST_BUILD
 			COMMAND ${CMAKE_COMMAND} -E copy "${FROM_FILE_LIB}" "${TO_FOLDER}"
 			
-			COMMENT "Copying the library and .gdextension file to each demo/../bin directory"
+			COMMENT "Copying the library file to ${TO_FOLDER}"
 		)
 		
-#		add_custom_command(
-#			TARGET godotlighter POST_BUILD
-#			COMMAND ${CMAKE_COMMAND} -E copy "${FROM_FILE_EXT}" "${TO_FOLDER}"
-#
-#			COMMENT "Copying the library and .gdextension file to each demo/../bin directory"
-#		)
+		add_custom_command(
+			TARGET godotlighter POST_BUILD
+			COMMAND ${CMAKE_COMMAND} -E copy "${FROM_FILE_EXT}" "${TO_FOLDER}"
+
+			COMMENT "Copying the .gdextension file to ${TO_FOLDER}"
+		)
 	endforeach ()
 endfunction()

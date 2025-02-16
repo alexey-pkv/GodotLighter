@@ -617,6 +617,7 @@ bool SQLMigrationNode::is_up_to_date() const
 	
 	auto scripts = l_get_migration_scripts(sql);
 	auto index = l_get_migration_offset(sql, get_migration_table());
+	auto issues = get_desync_issues();
 	
-	return no_errors() && index >= scripts.size();
+	return no_errors() && issues.is_empty() && index >= scripts.size();
 }
