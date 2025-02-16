@@ -73,30 +73,7 @@ if (MSVC)
 		MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Release>:>")
 endif ()
 
+
+define_demo_target()
 # TODO: Optimize this part:
 # add_dependencies(godotlighter godotlighter_build_godot_cpp)
-
-# TODO: Change, as currently this works only for linux and only for debug.
-if (UNIX)
-	add_custom_command(
-		TARGET godotlighter POST_BUILD
-		COMMAND cp "${GODOTLIGHTER_OUT}/libgodotlighter.${GODOTLIGHTER_PLATFORM}.template_debug.x86_64.so" "${CMAKE_CURRENT_SOURCE_DIR}/demos/4.3/versions/bin"
-		COMMAND cp "${GODOTLIGHTER_OUT}/libgodotlighter.${GODOTLIGHTER_PLATFORM}.template_debug.x86_64.so" "${CMAKE_CURRENT_SOURCE_DIR}/demos/4.3/error_handling/bin"
-		
-		COMMAND cp "${GODOTLIGHTER_OUT}/godotlighter.gdextension" "${CMAKE_CURRENT_SOURCE_DIR}/demos/4.3/versions/bin"
-		COMMAND cp "${GODOTLIGHTER_OUT}/godotlighter.gdextension" "${CMAKE_CURRENT_SOURCE_DIR}/demos/4.3/error_handling/bin"
-		
-		COMMENT "Copying file to each bin directory after build"
-	)
-elseif(WIN32)
-	add_custom_command(
-		TARGET godotlighter POST_BUILD
-		COMMAND ${CMAKE_COMMAND} -E copy "${GODOTLIGHTER_OUT}/godotlighter.${GODOTLIGHTER_PLATFORM}.template_debug.x86_64.dll" "${CMAKE_CURRENT_SOURCE_DIR}/demos/4.3/versions/bin"
-		COMMAND ${CMAKE_COMMAND} -E copy "${GODOTLIGHTER_OUT}/godotlighter.${GODOTLIGHTER_PLATFORM}.template_debug.x86_64.dll" "${CMAKE_CURRENT_SOURCE_DIR}/demos/4.3/error_handling/bin"
-		
-		COMMAND ${CMAKE_COMMAND} -E copy "${GODOTLIGHTER_OUT}/godotlighter.gdextension" "${CMAKE_CURRENT_SOURCE_DIR}/demos/4.3/versions/bin"
-		COMMAND ${CMAKE_COMMAND} -E copy "${GODOTLIGHTER_OUT}/godotlighter.gdextension" "${CMAKE_CURRENT_SOURCE_DIR}/demos/4.3/error_handling/bin"
-		
-		COMMENT "Copying file to each bin directory after build"
-	)
-endif ()
