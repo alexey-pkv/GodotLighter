@@ -75,7 +75,7 @@ public:
 struct MigrationLogData
 {
 public:
-	int 	Created	= 0;
+	gstr 	Created	= "";
 	int 	Index	= 0;
 	gstr	Path	= "";
 	bool	Result	= "";
@@ -89,7 +89,15 @@ public:
 		Index	= record["Index"];
 		Path	= record["Path"];
 		Result	= record["Result"];
-		Error	= record["Error"];
+		
+		if (record["Error"].get_type() == Variant::Type::NIL)
+		{
+			Error = "";
+		}
+		else
+		{
+			Error = record["Error"];
+		}
 	}
 	
 	Dictionary to_record() const
@@ -236,7 +244,7 @@ void SQLMigrationNode::_bind_methods()
 	ClassDB::bind_method(D_METHOD("create_migration_table"),				&SQLMigrationNode::create_migration_table);
 	ClassDB::bind_method(D_METHOD("get_migration_scripts_metadata"),		&SQLMigrationNode::get_migration_scripts_metadata);
 	ClassDB::bind_method(D_METHOD("is_migration_table_exists"),				&SQLMigrationNode::is_migration_table_exists);
-	ClassDB::bind_method(D_METHOD("load_migration_log", "include_errors"),	&SQLMigrationNode::load_migration_log);
+	ClassDB::bind_method(D_METHOD("get_migration_log", "include_errors"),	&SQLMigrationNode::get_migration_log);
 	ClassDB::bind_method(D_METHOD("get_desync_issues"),						&SQLMigrationNode::get_desync_issues);
 	ClassDB::bind_method(D_METHOD("is_up_to_date"),							&SQLMigrationNode::is_up_to_date);
 	
@@ -329,7 +337,7 @@ bool SQLMigrationNode::is_migration_table_exists_for(SQLNode* node) const
 
 bool SQLMigrationNode::run_migration(SQLNode* node, int offset)
 {
-	auto scripts = l_get_migration_scripts(node);
+	auto scripts = l_get_migration_scripts((SQLNode*)this);
 	
 	if (scripts.empty())
 	{
@@ -521,7 +529,7 @@ Array SQLMigrationNode::get_migration_scripts_metadata() const
 	return result;
 }
 
-Array SQLMigrationNode::load_migration_log(bool includeErrors) const
+Array SQLMigrationNode::get_migration_log(bool includeErrors) const
 {
 	if (m_isOneTime)
 		return {};
@@ -575,7 +583,7 @@ Array SQLMigrationNode::get_desync_issues() const
 		return {};
 	
 	auto logs = l_get_migration_log(sql, get_migration_table(), false);
-	auto scripts	= MigrationScriptData::to_map(l_get_migration_scripts(sql));
+	auto scripts	= MigrationScriptData::to_map(l_get_migration_scripts((Node*)this));
 	
 	for (const auto& log : logs)
 	{
@@ -615,7 +623,7 @@ bool SQLMigrationNode::is_up_to_date() const
 	
 	GLighter::errors()->reset_error();
 	
-	auto scripts = l_get_migration_scripts(sql);
+	auto scripts = l_get_migration_scripts((Node*)this);
 	auto index = l_get_migration_offset(sql, get_migration_table());
 	auto issues = get_desync_issues();
 	

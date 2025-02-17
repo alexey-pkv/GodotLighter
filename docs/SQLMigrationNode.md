@@ -33,7 +33,7 @@ This setting is useful for in-memory databases that will never be upgraded.
 
 ### `migration_table: String`
 
-The name of the migration table used to keep track of what Script nodes were executed. Irrelevant if `is_one_time` is set to true.
+The name of the migration table used to keep track of what script nodes were executed. Irrelevant if `is_one_time` is set to `true`.
 
 > You should not change this value for an existing database. Doing so will prevent any future migrations from running successfully. 
 
@@ -50,12 +50,14 @@ The name of the migration table used to keep track of what Script nodes were exe
 ---
 
 ### `create_migration_table(): bool`
-**Description**: Only creates the migration table if it does not already exist. `execute()` will invoke this method when called, so you don't need to call this method manually. 
+**Description**: Only creates the migration table if it does not already exist. `execute()` will invoke this method
+when called, so you don't need to call this method manually. 
 
-A migration table will only be created in an empty database. For this reason, if an execute is called for the first time on a database that is not 
-empty, the migration script will fail while trying to create the migration table. 
+A migration table will only be created in an empty database. For this reason, if the `execute()` method is called for
+the first time on a database that is **not** empty, the migration script will fail while trying to create the 
+migration table. 
 
-**Return**: `true` if the table was created successfully, or already exists. 
+**Return**: `true` if the table was created successfully or already exists. 
 
 ---
 
@@ -92,7 +94,9 @@ empty, the migration script will fail while trying to create the migration table
 ### `is_migration_table_exists(): bool`
 **Description**: Checks if the migration table, as defined by the property `migration_table`, already exists. 
 
-**Return**: `true` if the table exists. Neither the table's structure nor its content is validated.
+**Return**: `true` if the table exists. 
+
+Neither the table's structure nor its content is validated.
 
 ---
 
@@ -114,29 +118,71 @@ empty, the migration script will fail while trying to create the migration table
 | `Result`  | `true` or `false` value indicating if the execution was successful or not.                            |
 | `Error`   | The error message for unsuccessful runs.                                                              |
 
+**Example**:
+
+```
+extends Control
+
+@onready var migrations: SQLMigrationNode = $SQLNode/SQLMigrationNode
+
+func _ready() -> void:
+    migrations.execute()
+    print(migrations.load_migration_log(false))
+```
+
+```
+[{ "Created": "2025-02-17 08:32:20", "Index": 0, "Path": "/InitDB", "Result": true, "Error": "" }]
+```
+
 ---
 
 ### `get_desync_issues(): SQLStmt`
-**Description**: Executes a query and returns an [SQLStmt](Objects/SQLStmt.md) object containing the result.  
+**Description**: Identifies discrepancies between the migration table and the migration scripts.
 
-**Return**: Always returns an [SQLStmt](Objects/SQLStmt.md) object. Null will never be returned.  
-If an error occurs, the returned object will store the error details and have a failed status.
+This method is primarily used to detect and log migration issues when a migration fails.
+
+> Desync issues in a production build are **CRITICAL**. Running mismatched scripts
+can result in a corrupt save file or leave the database in an inconsistent state.
+
+**Return**: An array containing details of each discrepancy found between the migration log table and the migration scripts. 
+
+A non-empty value indicates an issue. An empty value means there are no desync issues.
 
 **Example**:
 
 ```
-var stmt_npcs: SQLStmt = sql.execute_stmt("SELECT * FROM People WHERE Status = ?", ["NPC"])
+extends Control
 
-print("The list of all NPC's: ")
-print(stmt_npcs.all())
+@onready var migrations: SQLMigrationNode = $SQLNode/SQLMigrationNode
 
-var stmt: SQLStmt = sqlexecute_stmt("SELECT * FROM Invalid-Query");
-
-print("Is Failed: " + str(stmt.is_error()))
-
-if stmt.has_error_info():
-    print("Error info: " + stmt.error_info().error())
+func _ready() -> void:
+    # First we run the migration script once
+    migrations.execute()
+    
+    # DeltaTable is the first script and 
+    # RuntimeTable is the second.
+    
+    # Now, let's rearrange the order of the scripts.
+    $SQLNode/SQLMigrationNode/Statistics.move_child(
+        $SQLNode/SQLMigrationNode/Statistics/DeltaTable, 
+        1)
+    
+    
+    
+    # Because the order of the scripts must be preserved,
+    # the rearrangement we made will cause an error.
+    print(migrations.get_desync_issues())
 ```
+
+Outputs:
+```
+[
+    "At position 1 expected script /Statistics/DeltaTable but got /Statistics/RuntimeTable", 
+    "At position 2 expected script /Statistics/RuntimeTable but got /Statistics/DeltaTable"
+]
+```
+
+Additionally, following execute commands will fail due to the desync issue.
 
 ---
 
@@ -147,8 +193,46 @@ if stmt.has_error_info():
 
 ## Signals
 
-### `on_error(error: SQLErrorInfo)`
-**Description**: This signal is emitted whenever an error occurs within the context of SQLNode. The signal carries an [SQLErrorInfo](SQLErrorInfo.md) object, which provides details about the error.
+### `begin_migration()`
+**Description**: The signal is triggered by the `execute()` method before any validations are made or any scripts run.
 
-> The signal is triggered by the corresponding signal from the attached `SQLErrors` object and acts as its alias. 
+---
 
+### `migration_failed()`
+**Description**: The signal is triggered if the `execute()` method fails to complete successfully.
+
+---
+
+### `migration_complete()`
+**Description**: The signal is triggered if the `execute()` method completes successfully, 
+even if no scripts were called (This can happen if the database is already up to date). 
+
+---
+
+### `before_script(path: String, script: SQLMigrationScript)`
+| Parameter | Type                | Description                                                                                       |
+|-----------|---------------------|---------------------------------------------------------------------------------------------------|
+| `path`    | String              | The relative path of the script to this migration node. Also use to uniquely identify the script. |
+| `script`  | SQLMigrationScript  | Reference to the script itself.                                                                   |
+
+**Description**: This method is called before each script is executed.
+
+---
+
+### `script_complete(path: String, script: SQLMigrationScript)`
+| Parameter | Type                | Description                                                                                       |
+|-----------|---------------------|---------------------------------------------------------------------------------------------------|
+| `path`    | String              | The relative path of the script to this migration node. Also use to uniquely identify the script. |
+| `script`  | SQLMigrationScript  | Reference to the script itself.                                                                   |
+
+**Description**: Triggered after each script, if it was executed successfully. 
+
+---
+
+### `script_failed(path: String, script: SQLMigrationScript)`
+| Parameter | Type                | Description                                                                                       |
+|-----------|---------------------|---------------------------------------------------------------------------------------------------|
+| `path`    | String              | The relative path of the script to this migration node. Also use to uniquely identify the script. |
+| `script`  | SQLMigrationScript  | Reference to the script itself.                                                                   |
+
+**Description**: Triggered when a script execution failed. 

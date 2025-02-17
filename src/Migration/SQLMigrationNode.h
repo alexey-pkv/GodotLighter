@@ -65,7 +65,7 @@ namespace godot
 		bool is_migration_table_exists() const;
 		
 		Array get_migration_scripts_metadata() const;
-		Array load_migration_log(bool includeErrors) const;
+		Array get_migration_log(bool includeErrors) const;
 		Array get_desync_issues() const;
 		bool is_up_to_date() const;
 	};

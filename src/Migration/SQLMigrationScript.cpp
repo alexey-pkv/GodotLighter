@@ -54,8 +54,6 @@ bool SQLMigrationScript::trigger_complete_event(bool result)
 
 bool SQLMigrationScript::validate_can_update(PackedStringArray& notes) const
 {
-	auto script = get_script();
-	
 	if (!has_method(UPDATE_METHOD))
 	{
 		std::stringstream ss;
