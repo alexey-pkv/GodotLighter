@@ -1,6 +1,6 @@
 # Database Initialization and Migrations
 
-One of the key features of the GodotLighter library is the [SQLMigrationNode](../SQLMigrationNode.md), 
+One of the key features of the GodotLighter library is the [`SQLMigrationNode`](../SQLMigrationNode.md), 
 which is responsible for database initialization and smooth migration to newer versions.
 
 There are two main ways to use the migration node:
@@ -19,5 +19,7 @@ necessary changes, such as the new column. When loading an old save, the game wi
 the database by running only the new migration script. For new saves, all scripts will run in order, ensuring 
 the database structure is consistent across both new and migrated saves.
 
+The exact behaviour of the node depends on the value of the [`is_one_time`](../SQLMigrationNode.md#is_one_time-bool)
+property.
 
-
+## One-Time setup

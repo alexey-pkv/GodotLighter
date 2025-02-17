@@ -26,9 +26,9 @@ Godot SQLite plugin
 - [ ] Basic Object to table Mapping 
 - [ ] Add callback functions support
 
-# Tutorials
+# Feature Examples
 
-* [Database Initialization and Migrations](./docs/Tutorials/Migrations.md)
+* [Database Initialization and Migrations](./docs/Features/Migrations.md)
 
 # References 
 
