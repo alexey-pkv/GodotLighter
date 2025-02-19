@@ -286,11 +286,11 @@ PackedStringArray SQLMigrationNode::_get_configuration_warnings() const
 	return a;
 }
 
-void SQLMigrationNode::_enter_tree()
+void SQLMigrationNode::_ready()
 {
-	Node::_enter_tree();
+	Node::_ready();
 	
-	if (!GLighter::is_editor() && m_autoRun)
+	if (m_autoRun && !GLighter::is_editor())
 	{
 		execute();
 	}

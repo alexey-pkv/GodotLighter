@@ -42,7 +42,7 @@ namespace godot
 		
 	public:
 		PackedStringArray _get_configuration_warnings() const override;
-		void _enter_tree() override;
+		void _ready() override;
 	
 	
 	public:

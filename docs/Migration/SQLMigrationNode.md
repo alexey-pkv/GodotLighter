@@ -8,15 +8,15 @@
 
 ### `auto_free: bool`
 
-If true, when a migration is complete successfully, the `SQLMigrationNode` will free itself automatically by calling `queue_free()`. 
+If `true`, when a migration is complete successfully, the `SQLMigrationNode` will free itself automatically by calling `queue_free()`. 
 
-If a migration process fails, the node will not be freed automatically, even if this property is set to true.
+If a migration process fails, the node will not be freed automatically, even if this property is set to `true`.
 
 ---
 
 ### `auto_run: bool`
 
-If set to true, the migration process will be executed as soon as this node enters the tree. In other words, the `execute()` method will be called when the `_enter_tree` signal is triggered. 
+If set to `true`, the migration process will be triggered from the `_ready` method. In other words, the `execute()` method will be called from `_ready`. 
 
 It's useful to use this flag with the `auto_free` especially for in-memory databases, ensuring a valid state when the parent SQLNode is mounted.
 
@@ -210,29 +210,29 @@ even if no scripts were called (This can happen if the database is already up to
 ---
 
 ### `before_script(path: String, script: SQLMigrationScript)`
-| Parameter | Type                | Description                                                                                       |
-|-----------|---------------------|---------------------------------------------------------------------------------------------------|
-| `path`    | String              | The relative path of the script to this migration node. Also use to uniquely identify the script. |
-| `script`  | SQLMigrationScript  | Reference to the script itself.                                                                   |
+| Parameter | Type                                          | Description                                                                                       |
+|-----------|-----------------------------------------------|---------------------------------------------------------------------------------------------------|
+| `path`    | String                                        | The relative path of the script to this migration node. Also use to uniquely identify the script. |
+| `script`  | [`SQLMigrationScript`](SQLMigrationScript.md) | Reference to the script itself.                                                                   |
 
 **Description**: This method is called before each script is executed.
 
 ---
 
 ### `script_complete(path: String, script: SQLMigrationScript)`
-| Parameter | Type                | Description                                                                                       |
-|-----------|---------------------|---------------------------------------------------------------------------------------------------|
-| `path`    | String              | The relative path of the script to this migration node. Also use to uniquely identify the script. |
-| `script`  | SQLMigrationScript  | Reference to the script itself.                                                                   |
+| Parameter | Type                                          | Description                                                                                       |
+|-----------|-----------------------------------------------|---------------------------------------------------------------------------------------------------|
+| `path`    | String                                        | The relative path of the script to this migration node. Also use to uniquely identify the script. |
+| `script`  | [`SQLMigrationScript`](SQLMigrationScript.md) | Reference to the script itself.                                                                   |
 
 **Description**: Triggered after each script, if it was executed successfully. 
 
 ---
 
 ### `script_failed(path: String, script: SQLMigrationScript)`
-| Parameter | Type                | Description                                                                                       |
-|-----------|---------------------|---------------------------------------------------------------------------------------------------|
-| `path`    | String              | The relative path of the script to this migration node. Also use to uniquely identify the script. |
-| `script`  | SQLMigrationScript  | Reference to the script itself.                                                                   |
+| Parameter | Type                                          | Description                                                                                       |
+|-----------|-----------------------------------------------|---------------------------------------------------------------------------------------------------|
+| `path`    | String                                        | The relative path of the script to this migration node. Also use to uniquely identify the script. |
+| `script`  | [`SQLMigrationScript`](SQLMigrationScript.md) | Reference to the script itself.                                                                   |
 
 **Description**: Triggered when a script execution failed. 

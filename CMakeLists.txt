@@ -30,13 +30,6 @@ file(GLOB_RECURSE GODOTLIGHTER_HEADERS
 	"${CMAKE_CURRENT_SOURCE_DIR}/src/*.h"
 )
 
-file(GLOB_RECURSE GODOTLIGHTER_DEMOS_BIN 
-	"${CMAKE_CURRENT_SOURCE_DIR}/demos/*/*/bin/"
-)
-
-
-
-
 
 ############################
 ### Targets		 ###########
@@ -45,7 +38,7 @@ file(GLOB_RECURSE GODOTLIGHTER_DEMOS_BIN
 add_library(godotlighter EXCLUDE_FROM_ALL SHARED ${GODOTLIGHTER_SOURCE})
 
 # This will copy the extension and library files after godotlighter is build.
-define_demo_target()
+define_example_target()
 
 set_target_properties(godotlighter PROPERTIES 
 	OUTPUT_NAME "godotlighter.${GODOTLIGHTER_PLATFORM}.template_debug.x86_64"

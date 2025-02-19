@@ -1,4 +1,4 @@
-function(define_demo_target)
+function(define_example_target)
 	if (UNIX)
 		set(LIB_NAME libgodotlighter)
 		set(LIB_EXT so)
@@ -7,18 +7,18 @@ function(define_demo_target)
 		set(LIB_EXT dll)
 	endif ()
 	
-	file(GLOB DEMO_DIRS
-		"${CMAKE_SOURCE_DIR}/demos/*/*")
+	file(GLOB EXAMPLE_DIRS
+		"${CMAKE_SOURCE_DIR}/examples/*/*")
 	
 	set(FROM_FILE_EXT "${GODOTLIGHTER_OUT}/godotlighter.gdextension")
 	
 	
-	foreach (DEMO_DIR ${DEMO_DIRS})
-		MESSAGE(STATUS "Demo folder: ${DEMO_DIR}")
+	foreach (EXAMPLE_DIR ${EXAMPLE_DIRS})
+		MESSAGE(STATUS "Example folder: ${EXAMPLE_DIR}")
 		
 		
 		set(FROM_FILE_LIB "${GODOTLIGHTER_OUT}/${LIB_NAME}.${GODOTLIGHTER_PLATFORM}.template_debug.x86_64.${LIB_EXT}")
-		set(TO_FOLDER "${DEMO_DIR}/bin")
+		set(TO_FOLDER "${EXAMPLE_DIR}/bin")
 		
 		
 		add_custom_command(

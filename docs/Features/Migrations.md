@@ -1,57 +1,29 @@
-# Database Initialization and Migrations
+# Database Initialization and Migrations  
 
-One of the key features of the GodotLighter library is the [`SQLMigrationNode`](../SQLMigrationNode.md), 
-which is responsible for database initialization and smooth migration to newer versions.
+One of the key features of the GodotLighter library is the 
+[`SQLMigrationNode`](../Migration/SQLMigrationNode.md), which handles database initialization 
+and ensures seamless migration to newer versions.  
 
-There are two node types used in the migration process:  
+There are two node types involved in the migration process:  
 
-- `SQLMigrationScript` contains a single migration script used to update the database.  
-- [`SQLMigrationNode`](../SQLMigrationNode.md) manages the migration process itself.  
+- [`SQLMigrationScript`](../Migration/SQLMigrationNode.md): Represents a single migration script used to update the database.  
+- [`SQLMigrationNode`](../Migration/SQLMigrationNode.md): Manages the overall migration process.  
 
-When the `execute()` method of `SQLMigrationNode` is called, the node searches for any child or grandchild
-`SQLMigrationScript` nodes and attempts to run them one after another in order.  
+## Initialization vs. Migrations  
 
-The `SQLMigrationScript` must have a script with the `_update(node: SQLNode)` method implemented. This is the method
-that will be called by `SQLMigrationNode` to initialize or update the database. 
+GodotLighter provides two ways to utilize migration functionality, determined by the value of 
+the [`is_one_time`](../SQLMigrationNode.md#is_one_time-bool) property:  
 
-```
-extends SQLMigrationScript
+1. **One-time database setup (`is_one_time = true`)**  
+   - Used to set up a database once, typically for cases where persistence is unnecessary (e.g., an in-memory database used only during runtime).  
+   - `SQLMigrationNode` expects a new, empty database each time it runs, so no migration log table is created.  
 
-func _update(node: SQLNode) -> void:
-	var create = node.create_table()
-	
-	create.table("NPCs")
-	create.column_exp("FirstName TEXT")
-	create.column_exp("LastName TEXT")
-	create.column_exp("Age INTEGER")
-	create.create()
-```
 
-## One-time database setup
+2. **Database with a migration log (`is_one_time = false`)**  
+   - Allows `SQLMigrationNode` to be executed multiple times on the same database.  
+   - Maintains a migration log table to track which `SQLMigrationScript` nodes have already been executed, ensuring that only pending migrations run.  
+   - Example use case: for preserving the database between game runs and automatically applying updates when a new game version is released, keeping older save files compatible.  
 
-Used to set up the database once, ideal for cases where you don't need to persist the database between
-runs (e.g., an in-memory database used only during runtime).
+The chosen functionality and how migrations are handled depend on the `is_one_time` property, making it a key factor in determining whether the database operates as a temporary instance or a persistent, version-controlled system.
 
-To achieve this behaviour, simple create a `SQLMigrationNode` with the property 
-[`is_one_time`](../SQLMigrationNode.md#is_one_time-bool) set to `true`.
-
-## Database with a migration log
-This option allows the node to maintain a migration log table within the database, ensuring that only scripts that 
-haven't been run yet are executed.
-
-Useful when you need to maintain the database between game runs and automatically upgrade it 
-when a new version of the game is launched. For example, if you release a game with a specific database structure
-and later need to modify it (e.g., by adding a new column), loading an old save in the new version may cause 
-issues due to the structure mismatch. To handle this, you'd add a migration script that only adds the 
-necessary changes, such as the new column. When loading an old save, the game will automatically update 
-the database by running only the new migration script. For new saves, all scripts will run in order, ensuring 
-the database structure is consistent across both new and migrated saves.
-
-The exact behaviour of the node depends on the value of the [`is_one_time`](../SQLMigrationNode.md#is_one_time-bool)
-property.
-
-To achieve this behaviour, create a `SQLMigrationNode` with the property 
-[`is_one_time`](../SQLMigrationNode.md#is_one_time-bool) set to `false`. When executed, a migration table
-will be created. The name of the table is defined by the 
-[`migration_table`](../SQLMigrationNode.md#migration_table-string) property.
-
+## Setting Up
