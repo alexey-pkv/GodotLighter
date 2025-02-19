@@ -35,6 +35,8 @@ Godot SQLite plugin
 * [GLighter](./docs/GLighter.md)
 * [SQLNode](./docs/SQLNode.md)
 * [SQLMigrationNode](./docs/Migration/SQLMigrationNode.md)
+* [SQLMigrationScript](./docs/Migration/SQLMigrationScript.md)
+
 
 ### Error Handling
 * TODO: How the library handles errors.
