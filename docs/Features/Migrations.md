@@ -27,3 +27,17 @@ the [`is_one_time`](../SQLMigrationNode.md#is_one_time-bool) property:
 The chosen functionality and how migrations are handled depend on the `is_one_time` property, making it a key factor in determining whether the database operates as a temporary instance or a persistent, version-controlled system.
 
 ## Setting Up
+
+Here is an example of a simple structure:
+
+![Example of the structure](../resources/migration_structure.png)
+
+Is this example the nodes are,
+
+| Node                                         | Type                                                       | Description                                                                                                                                                                                                                                      |
+|----------------------------------------------|------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `SQLNode`                                    | [`SQLNode`](../SQLNode.md)                                 | This is the database node                                                                                                                                                                                                                        |
+| `SQLMigrationNode`                           | [`SQLMigrationNode`](../Migration/SQLMigrationNode.md)     | This is the migration node                                                                                                                                                                                                                       |
+| `v_1_0_0` and `v_1_1_0`                      | `Node`                                                     | These two are simple nodes and there only purpose is to seperate the scripts that we used in our first version of the game from the changes introduced in version v_1_1_0                                                                        |
+| `Init`, `NPC_Bob`, `NPC_Rob` and `NPC_Benny` | [`SQLMigrationScript`](../Migration/SQLMigrationScript.md) | This are the migration script nodes that will run when the migration process is triggered. Each one must have a script file attached to it with the [`_update`](../Migration/SQLMigrationScript.md#_updatenode-sqlnode-void) method implemented. |
+

@@ -28,7 +28,7 @@ Godot SQLite plugin
 
 # Feature Examples
 
-* [Database Initialization and Migrations](./docs/Features/Migrations.md)
+* [Database Migrations](./docs/Features/Migrations.md)
 
 # References 
 

@@ -5,7 +5,7 @@
 A `SQLMigrationScript` represents an individual migration script used to update a database.  
 
 While it is possible to use this node on its own for database updates, it is designed 
-to function as a child (or grandchild) of the [`SQLMigrationNode`](SQLMigrationNode.md).
+to function as a child (of any depth) of the [`SQLMigrationNode`](SQLMigrationNode.md).
 
 
 ## Virtual Methods
