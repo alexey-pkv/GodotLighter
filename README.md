@@ -14,7 +14,7 @@ Godot SQLite plugin
 - [ ] Add documentation / Tutorial
 - [ ] Ensure that any existing statements are finalized when the DB connection is closed
 - [ ] Add JOIN, JOIN LEFT and JOIN RIGHT to the select constructor
-- [ ] Add basic migration tools
+- [x] Add basic migration tools
 
 ### **v1.1.0**
 - [ ] Add binding by name
