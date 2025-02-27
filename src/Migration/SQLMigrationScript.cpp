@@ -7,6 +7,7 @@
 #include "Utils/helpers.h"
 
 #include <sstream>
+#include <godot_cpp/classes/resource_loader.hpp>
 
 
 using namespace godot;

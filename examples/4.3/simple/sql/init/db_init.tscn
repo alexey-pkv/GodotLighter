@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3 uid="uid://dpt2ykx6t7hr0"]
+
+[ext_resource type="Script" path="res://sql/init/init.gd" id="1_ndqqb"]
+[ext_resource type="Script" path="res://sql/init/insert_players.gd" id="2_004wk"]
+
+[node name="DBInit" type="SQLMigrationNode"]
+
+[node name="Init" type="SQLMigrationScript" parent="."]
+script = ExtResource("1_ndqqb")
+
+[node name="InsertPlayers" type="SQLMigrationScript" parent="."]
+script = ExtResource("2_004wk")

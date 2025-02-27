@@ -1,0 +1,62 @@
+[gd_scene load_steps=4 format=3 uid="uid://gge2ievub2on"]
+
+[ext_resource type="Script" path="res://objects/actor.gd" id="1_oeen5"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_re5xx"]
+size = Vector2(3.53539, 3.53539)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_8pyr3"]
+
+[node name="Actor" type="RigidBody2D"]
+gravity_scale = 0.0
+contact_monitor = true
+max_contacts_reported = 32
+script = ExtResource("1_oeen5")
+actor_color = Color(0.68396, 0.789042, 1, 1)
+
+[node name="Dagger_Body" type="ColorRect" parent="."]
+offset_left = -10.0
+offset_top = -6.0
+offset_right = -1.515
+offset_bottom = 2.485
+rotation = 0.785398
+
+[node name="Dagger" type="CollisionShape2D" parent="."]
+position = Vector2(-13.4999, 0)
+rotation = 0.785398
+shape = SubResource("RectangleShape2D_re5xx")
+
+[node name="Body" type="ColorRect" parent="."]
+offset_left = -10.0
+offset_top = -10.0
+offset_right = 10.0
+offset_bottom = 10.0
+
+[node name="Shape" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_8pyr3")
+
+[node name="NameTag" type="Label" parent="."]
+visible = false
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -100.0
+offset_top = 20.0
+offset_right = 100.0
+offset_bottom = 50.0
+grow_horizontal = 2
+text = "Name Tag"
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+
+[node name="Life" type="Label" parent="."]
+offset_left = -100.0
+offset_top = -50.0
+offset_right = 100.0
+offset_bottom = -20.0
+text = "100"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="body_shape_entered" from="." to="." method="handle_body_shape_entered"]

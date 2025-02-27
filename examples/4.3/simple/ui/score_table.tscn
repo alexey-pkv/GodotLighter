@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3 uid="uid://djt7rbtq10gpy"]
+
+[ext_resource type="Script" path="res://ui/score_table.gd" id="1_h1c4x"]
+[ext_resource type="PackedScene" uid="uid://cvgcbvo32w1go" path="res://ui/table_record.tscn" id="2_p0c08"]
+
+[node name="ScoreTable" type="VBoxContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 0
+script = ExtResource("1_h1c4x")
+
+[node name="TableRecord" parent="." instance=ExtResource("2_p0c08")]
+layout_mode = 2
+
+[node name="records" type="VBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 0

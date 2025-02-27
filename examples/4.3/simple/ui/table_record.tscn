@@ -1,0 +1,89 @@
+[gd_scene load_steps=4 format=3 uid="uid://cvgcbvo32w1go"]
+
+[ext_resource type="PackedScene" uid="uid://gge2ievub2on" path="res://objects/actor.tscn" id="1_cjdws"]
+[ext_resource type="Script" path="res://ui/table_record.gd" id="1_ip87p"]
+[ext_resource type="Script" path="res://behavior/shadow_behavior.gd" id="2_pj6qw"]
+
+[node name="TableRecord" type="HBoxContainer"]
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+theme_override_constants/separation = 0
+script = ExtResource("1_ip87p")
+
+[node name="container_shadow" type="ColorRect" parent="."]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+color = Color(0.227451, 0.227451, 0.227451, 1)
+
+[node name="Actor" parent="container_shadow" instance=ExtResource("1_cjdws")]
+process_mode = 4
+visible = false
+position = Vector2(32, 32)
+life = 0
+
+[node name="ShadowBehavior" type="Node" parent="container_shadow/Actor"]
+process_mode = 3
+script = ExtResource("2_pj6qw")
+
+[node name="container_name" type="ColorRect" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+color = Color(0.227451, 0.227451, 0.227451, 1)
+
+[node name="_mrg" type="MarginContainer" parent="container_name"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="lbl_name" type="Label" parent="container_name/_mrg"]
+layout_mode = 2
+
+[node name="container_kills" type="ColorRect" parent="."]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+color = Color(0.227451, 0.227451, 0.227451, 1)
+
+[node name="lbl_kills" type="Label" parent="container_kills"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="container_death" type="ColorRect" parent="."]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+color = Color(0.227451, 0.227451, 0.227451, 1)
+
+[node name="lbl_death" type="Label" parent="container_death"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+horizontal_alignment = 1
+vertical_alignment = 1

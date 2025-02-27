@@ -250,8 +250,7 @@ void SQLMigrationNode::_bind_methods()
 	
 	
 	ADD_SIGNAL(MethodInfo("begin_migration"));
-	ADD_SIGNAL(MethodInfo("migration_failed"));
-	ADD_SIGNAL(MethodInfo("migration_complete"));
+	ADD_SIGNAL(MethodInfo("migration_complete", PropertyInfo(Variant::BOOL, "is_successful")));
 	
 	{
 		auto pathProperty	= PropertyInfo(Variant::STRING, "path");
@@ -292,7 +291,7 @@ void SQLMigrationNode::_ready()
 	
 	if (m_autoRun && !GLighter::is_editor())
 	{
-		execute();
+		call_deferred("execute");
 	}
 }
 
@@ -494,7 +493,7 @@ bool SQLMigrationNode::execute()
 	
 	if (node == nullptr)
 	{
-		emit_signal("migration_failed");
+		emit_signal("migration_complete", false);
 		return false;
 	}
 	
@@ -502,7 +501,7 @@ bool SQLMigrationNode::execute()
 	
 	if (result)
 	{
-		emit_signal("migration_complete");
+		emit_signal("migration_complete", true);
 		
 		if (m_autoFree)
 		{
@@ -511,7 +510,7 @@ bool SQLMigrationNode::execute()
 	}
 	else
 	{
-		emit_signal("migration_failed");
+		emit_signal("migration_complete", false);
 	}
 	
 	return result;

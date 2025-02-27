@@ -1,0 +1,24 @@
+[gd_scene load_steps=3 format=3 uid="uid://ebqtw8203qff"]
+
+[ext_resource type="Script" path="res://ui/battle_field.gd" id="1_qsy6w"]
+[ext_resource type="PackedScene" uid="uid://bjhhgs3nwc1q7" path="res://objects/arena.tscn" id="2_4uhcg"]
+
+[node name="BattleField" type="Control"]
+clip_contents = true
+layout_mode = 3
+anchors_preset = 0
+offset_right = 500.0
+offset_bottom = 500.0
+script = ExtResource("1_qsy6w")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0.111649, 0.113595, 1)
+
+[node name="Arena" parent="." instance=ExtResource("2_4uhcg")]
+area = Rect2i(0, 0, 500, 500)

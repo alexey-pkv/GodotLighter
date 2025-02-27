@@ -1,0 +1,42 @@
+[gd_scene load_steps=6 format=3 uid="uid://bjhhgs3nwc1q7"]
+
+[ext_resource type="Script" path="res://objects/arena.gd" id="1_jwy3s"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_a3spr"]
+normal = Vector2(1, 0)
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_psrt3"]
+resource_local_to_scene = true
+normal = Vector2(-1, 0)
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_ujwas"]
+normal = Vector2(0, 1)
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_n8sjc"]
+
+[node name="Arena" type="Node2D"]
+script = ExtResource("1_jwy3s")
+
+[node name="Left" type="StaticBody2D" parent="."]
+position = Vector2(-10, 0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Left"]
+shape = SubResource("WorldBoundaryShape2D_a3spr")
+
+[node name="Right" type="StaticBody2D" parent="."]
+position = Vector2(10, 0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Right"]
+shape = SubResource("WorldBoundaryShape2D_psrt3")
+
+[node name="Top" type="StaticBody2D" parent="."]
+position = Vector2(0, -10)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Top"]
+shape = SubResource("WorldBoundaryShape2D_ujwas")
+
+[node name="Bottom" type="StaticBody2D" parent="."]
+position = Vector2(0, 10)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Bottom"]
+shape = SubResource("WorldBoundaryShape2D_n8sjc")

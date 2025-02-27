@@ -1,0 +1,85 @@
+[gd_scene load_steps=5 format=3 uid="uid://bos5elw8rpwjb"]
+
+[ext_resource type="Script" path="res://main.gd" id="1_sc7lg"]
+[ext_resource type="PackedScene" uid="uid://ebqtw8203qff" path="res://ui/battle_field.tscn" id="1_v2syl"]
+[ext_resource type="PackedScene" uid="uid://dpt2ykx6t7hr0" path="res://sql/init/db_init.tscn" id="3_54wa3"]
+[ext_resource type="PackedScene" uid="uid://djt7rbtq10gpy" path="res://ui/score_table.tscn" id="3_dngci"]
+
+[node name="Main" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_sc7lg")
+
+[node name="SQLNode" type="SQLNode" parent="."]
+
+[node name="DBInit" parent="SQLNode" instance=ExtResource("3_54wa3")]
+auto_free = true
+auto_run = true
+is_one_time = true
+
+[node name="cont" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="mar" type="MarginContainer" parent="cont"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="sec" type="VBoxContainer" parent="cont/mar"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="mar" type="MarginContainer" parent="cont/mar/sec"]
+layout_mode = 2
+theme_override_constants/margin_bottom = 5
+
+[node name="sec" type="HBoxContainer" parent="cont/mar/sec/mar"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Label" type="Label" parent="cont/mar/sec/mar/sec"]
+layout_mode = 2
+text = "Order By: "
+
+[node name="opt_order" type="OptionButton" parent="cont/mar/sec/mar/sec"]
+layout_mode = 2
+size_flags_horizontal = 8
+selected = 0
+allow_reselect = true
+item_count = 3
+popup/item_0/text = "Kills"
+popup/item_1/text = "Death"
+popup/item_1/id = 1
+popup/item_2/text = "Name"
+popup/item_2/id = 2
+
+[node name="btn_order" type="Button" parent="cont/mar/sec/mar/sec"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+text = "↓"
+
+[node name="ScoreTable" parent="cont/mar/sec" instance=ExtResource("3_dngci")]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="BattleField" parent="cont" instance=ExtResource("1_v2syl")]
+custom_minimum_size = Vector2(500, 500)
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
+
+[connection signal="item_selected" from="cont/mar/sec/mar/sec/opt_order" to="." method="handle_opt_order_item_selected"]
+[connection signal="pressed" from="cont/mar/sec/mar/sec/btn_order" to="." method="handle_btn_order_pressed"]

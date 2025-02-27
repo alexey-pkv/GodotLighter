@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://ppu7sbuw405y"]
+
+[ext_resource type="PackedScene" uid="uid://gge2ievub2on" path="res://objects/actor.tscn" id="1_3if2e"]
+[ext_resource type="Script" path="res://test_scene.gd" id="1_mq5jr"]
+[ext_resource type="PackedScene" uid="uid://bjhhgs3nwc1q7" path="res://objects/arena.tscn" id="3_sidag"]
+
+[node name="TestScene" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_mq5jr")
+
+[node name="Actor" parent="." instance=ExtResource("1_3if2e")]
+position = Vector2(500, 500)
+actor_color = Color(0, 0, 0, 1)
+
+[node name="Arena" parent="." instance=ExtResource("3_sidag")]
+area = Rect2i(200, 200, 600, 600)
