@@ -23,6 +23,7 @@ var m_respawn_queue	: Array		= []
 var m_actor_dao		: ActorDAO	= null
 var m_order_asc		: bool		= true
 var m_order_by		: String	= "Kills"
+var m_players		: int		= 1
 
 #endregion
 
@@ -53,21 +54,36 @@ func _place(behavior: AbstractBehavior = null) -> Actor:
 	
 	return actor
 
-func _place_bot(id: int, tag_name: String, color: Color) -> Actor:
+func _place_bot(id: int, tag_name: String, color: Color) -> void:
 	var actor = _place(AIBehavior.new())
 	
 	actor.id			= id
 	actor.actor_color	= color
 	actor.tag_name		= tag_name
 	
-	return actor
+func _place_player(id: int, tag_name: String, color: Color) -> PlayerBehavior:
+	var behavior	= PlayerBehavior.new()
+	var actor		= _place(behavior)
+	
+	actor.id			= id
+	actor.actor_color	= color
+	actor.tag_name		= tag_name
+	
+	return behavior
 
 func _spawn_actor(id: int) -> void:
 	m_actor_dao.save_is_dead(id, false)
 	
 	var data = m_actor_dao.load_by_id(id)
 	
-	_place_bot(data["ID"], data["Name"], Color.html(data["Color"]))
+	if id <= m_players:
+		var behaviour = _place_player(data["ID"], data["Name"], Color.html(data["Color"]))
+	
+		# 1 player uses arrows, second WASD
+		behaviour.is_arrows = (id == 1)
+	else:
+		_place_bot(data["ID"], data["Name"], Color.html(data["Color"]))
+	
 	_update_table()
 
 func _wait_for_db() -> void:
@@ -106,6 +122,11 @@ func _update_table() -> void:
 #region Build In Methods
 
 func _ready() -> void:
+	# Uncomment and modify to enable player control:
+	m_players = 0
+	# m_players = 1	# Arrows
+	# m_players = 2	# AWSD
+	
 	var startTime : int = Time.get_ticks_msec()
 	
 	randomize()
