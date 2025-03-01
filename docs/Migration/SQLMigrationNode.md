@@ -198,14 +198,12 @@ Additionally, following execute commands will fail due to the desync issue.
 
 ---
 
-### `migration_failed()`
-**Description**: The signal is triggered if the `execute()` method fails to complete successfully.
+### `migration_complete(success: bool)`
+| Parameter  | Type                                          | Description                                      |
+|------------|-----------------------------------------------|--------------------------------------------------|
+| `success`  | bool                                          | True, if the execution was complete successfully |
 
----
-
-### `migration_complete()`
-**Description**: The signal is triggered if the `execute()` method completes successfully, 
-even if no scripts were called (This can happen if the database is already up to date). 
+**Description**: The signal is triggered by the `execute()` method after the migration process was triggered.
 
 ---
 

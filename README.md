@@ -8,13 +8,6 @@
 Godot SQLite plugin
 
 
-# Using GodotLighter
-
-
-
-
-
-
 # Road Map
 
 ### **v1.0.0**
