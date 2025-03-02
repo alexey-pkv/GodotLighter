@@ -21,7 +21,7 @@ const ARROW_UP		= "↑"
 var m_rnd						= RandomNumberGenerator.new()
 var m_respawn_queue	: Array		= []
 var m_actor_dao		: ActorDAO	= null
-var m_order_asc		: bool		= true
+var m_order_asc		: bool		= false
 var m_order_by		: String	= "Kills"
 var m_players		: int		= 1
 
@@ -104,6 +104,11 @@ func _wait_for_db() -> void:
 	after = Time.get_ticks_msec() - startTime
 	print("SQL setup complete after " + str(after) + " ms")
 
+func _update_order_button() -> void:
+	var arrow = ARROW_DOWN if m_order_asc else ARROW_UP
+	
+	$cont/mar/sec/mar/sec/btn_order.text = arrow
+
 func _update_table() -> void:
 	var startTime = Time.get_ticks_usec()
 	var all = m_actor_dao.load_all(m_order_by, m_order_asc)
@@ -137,6 +142,7 @@ func _ready() -> void:
 	for id in m_actor_dao.load_all_ids():
 		m_respawn_queue.push_back([id, Time.get_ticks_msec()])
 	
+	_update_order_button()
 	_update_table()
 	
 	print("Ready after " + str(Time.get_ticks_msec() - startTime) + " ms")
@@ -195,10 +201,7 @@ func handle_opt_order_item_selected(index: int) -> void:
 func handle_btn_order_pressed() -> void:
 	m_order_asc = !m_order_asc
 	
-	var arrow = ARROW_DOWN if m_order_asc else ARROW_UP
-	
-	$cont/mar/sec/mar/sec/btn_order.text = arrow
-	
+	_update_order_button()
 	_update_table()
 
 #endregion

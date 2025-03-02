@@ -1,0 +1,33 @@
+[configuration]
+entry_symbol = "godotlighter_library_init"
+compatibility_minimum = "@GODOTLIGHTER_GODOT_VERSION@"
+reloadable = false
+
+
+[libraries]
+macos.debug = "./libgodotlighter.macos.template_debug.framework"
+macos.release = "./libgodotlighter.macos.template_release.framework"
+ios.debug = "./libgodotlighter.ios.template_debug.xcframework"
+ios.release = "./libgodotlighter.ios.template_release.xcframework"
+windows.debug.x86_32 = "./godotlighter.windows.template_debug.x86_32.dll"
+windows.release.x86_32 = "./godotlighter.windows.template_release.x86_32.dll"
+windows.debug.x86_64 = "./godotlighter.windows.template_debug.x86_64.dll"
+windows.release.x86_64 = "./godotlighter.windows.template_release.x86_64.dll"
+linux.debug.x86_64 = "./libgodotlighter.linux.template_debug.x86_64.so"
+linux.release.x86_64 = "./libgodotlighter.linux.template_release.x86_64.so"
+linux.debug.arm64 = "./libgodotlighter.linux.template_debug.arm64.so"
+linux.release.arm64 = "./libgodotlighter.linux.template_release.arm64.so"
+linux.debug.rv64 = "./libgodotlighter.linux.template_debug.rv64.so"
+linux.release.rv64 = "./libgodotlighter.linux.template_release.rv64.so"
+android.debug.x86_64 = "./libgodotlighter.android.template_debug.x86_64.so"
+android.release.x86_64 = "./libgodotlighter.android.template_release.x86_64.so"
+android.debug.arm64 = "./libgodotlighter.android.template_debug.arm64.so"
+android.release.arm64 = "./libgodotlighter.android.template_release.arm64.so"
+
+[dependencies]
+ios.debug = {
+    "./libgodot-cpp.ios.template_debug.xcframework": ""
+}
+ios.release = {
+    "./libgodot-cpp.ios.template_release.xcframework": ""
+}

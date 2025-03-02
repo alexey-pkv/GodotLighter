@@ -42,6 +42,19 @@ const TAG_NAME_OFFSET	: Vector2	= Vector2(-100, +20)
 
 #region Methods
 
+func update_life_label() -> void:
+	tag_name_label.text	= tag_name
+	
+	life_label.text = str(life)
+	
+	if life < 20:
+		life_label.set("theme_override_colors/font_color", Color.RED)
+	elif life < 50:
+		life_label.set("theme_override_colors/font_color", Color.YELLOW)
+	else:
+		life_label.set("theme_override_colors/font_color", Color.GREEN)
+	
+
 func update_color() -> void:
 	if !is_inside_tree(): return
 	
@@ -76,6 +89,7 @@ func disable() -> void:
 
 func _ready() -> void:
 	update_color()
+	update_life_label()
 
 func _physics_process(delta: float) -> void:
 	var target_velocity = Vector2(target_speed, 0).rotated(rotation)
@@ -102,16 +116,7 @@ func _physics_process(delta: float) -> void:
 				angular_velocity += frame_ang_acceleration
 
 func _process(_delta: float) -> void:
-	tag_name_label.text	= tag_name
-	
-	life_label.text = str(life)
-	
-	if life < 20:
-		life_label.set("theme_override_colors/font_color", Color.RED)
-	elif life < 50:
-		life_label.set("theme_override_colors/font_color", Color.YELLOW)
-	else:
-		life_label.set("theme_override_colors/font_color", Color.GREEN)
+	update_life_label()
 	
 	life_label.rotation = -rotation
 	life_label.position = LIFE_OFFSET.rotated(-rotation)
