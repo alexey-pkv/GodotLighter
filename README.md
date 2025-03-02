@@ -5,7 +5,9 @@
 
 # GodotLighter 
 
-Godot SQLite plugin
+SQLite plugin for Godot. 
+
+An example project can be found here: [docs/Example.md](./docs/Example.md) 
 
 
 # Road Map
@@ -27,9 +29,11 @@ Godot SQLite plugin
 - [ ] Basic Object to table Mapping 
 - [ ] Add callback functions support
 
-# Feature Examples
 
-* [Database Migrations](./docs/Features/Migrations.md)
+# Guides
+
+* [Database Migrations](./docs/Guides/Migrations.md)
+
 
 # References 
 

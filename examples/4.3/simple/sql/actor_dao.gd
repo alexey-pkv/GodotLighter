@@ -34,12 +34,10 @@ func load_all(order_by: String, asc: bool) -> Array:
 	return select.query_all()
 
 func load_by_id(id: int) -> Dictionary:
-	var select = m_sql.select()
-	
-	select.from("Actor")
-	select.by_field("ID", id)
-	
-	return select.query_row()
+	return m_sql.select() \
+		.from("Actor") \
+		.by_field("ID", id) \
+		.query_row()
 
 func save_is_dead(id: int, is_dead: bool) -> void:
 	var update = m_sql.update()
