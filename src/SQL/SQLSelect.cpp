@@ -25,11 +25,16 @@ void SQLSelect::_bind_methods()
 	ClassDB::bind_method(D_METHOD("column_as", "column", "as"),			&SQLSelect::column_as);
 	ClassDB::bind_method(D_METHOD("columns", "columns"),				&SQLSelect::columns);
 	
-	
 	bind_from<SQLSelect>();
 	bind_limit<SQLSelect>();
 	bind_order_by<SQLSelect>();
 	bind_where<SQLSelect>();
+	
+	
+	ClassDB::bind_method(D_METHOD("join_exp", "exp", "binds"),							&SQLSelect::join_exp);
+	ClassDB::bind_method(D_METHOD("join", "what", "as", "condition", "binds"),			&SQLSelect::join);
+	ClassDB::bind_method(D_METHOD("left_join", "what", "as", "condition", "binds"),		&SQLSelect::left_join);
+	ClassDB::bind_method(D_METHOD("right_join", "what", "as", "condition", "binds"),	&SQLSelect::right_join);
 	
 	ClassDB::bind_method(D_METHOD("query_row"),			&SQLSelect::query_row);
 	ClassDB::bind_method(D_METHOD("query_row_numeric"),	&SQLSelect::query_row_numeric);
@@ -101,6 +106,31 @@ CLAUSE_FROM_IMPL(SQLSelect)
 CLAUSE_WHERE_IMPL(SQLSelect)
 CLAUSE_ORDER_BY_IMPL(SQLSelect)
 CLAUSE_LIMIT_IMPL(SQLSelect)
+
+
+Ref<SQLSelect> SQLSelect::join_exp(const gstr& exp, const Array& binds)
+{
+	m_cmd->join_exp(str2str(exp), var2val(binds));
+	return { this };
+}
+
+Ref<SQLSelect> SQLSelect::join(const gstr& what, const gstr& as, const gstr& condition, const Array& binds)
+{
+	m_cmd->join(str2str(what), str2str(as), str2str(condition), var2val(binds));
+	return { this };
+}
+
+Ref<SQLSelect> SQLSelect::left_join(const gstr& what, const gstr& as, const gstr& condition, const Array& binds)
+{
+	m_cmd->left_join(str2str(what), str2str(as), str2str(condition), var2val(binds));
+	return { this };
+}
+
+Ref<SQLSelect> SQLSelect::right_join(const gstr& what, const gstr& as, const gstr& condition, const Array& binds)
+{
+	m_cmd->right_join(str2str(what), str2str(as), str2str(condition), var2val(binds));
+	return { this };
+}
 
 
 Dictionary SQLSelect::query_row()

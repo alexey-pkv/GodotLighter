@@ -41,6 +41,28 @@ namespace godot
 		
 		
 	public:
+		Ref<SQLSelect> join_exp(const gstr&exp, const Array& binds);
+		
+		Ref<SQLSelect> join(
+			const gstr&what,
+			const gstr&as,
+			const gstr&condition,
+			const Array& binds);
+		
+		Ref<SQLSelect> left_join(
+			const gstr&what,
+			const gstr&as,
+			const gstr&condition,
+			const Array& binds);
+		
+		Ref<SQLSelect> right_join(
+			const gstr&what,
+			const gstr&as,
+			const gstr&condition,
+			const Array& binds);
+		
+		
+	public:
 		Dictionary query_row();
 		Array query_row_numeric();
 		Array query_all();
