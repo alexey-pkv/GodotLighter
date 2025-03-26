@@ -25,9 +25,9 @@
 	Ref<class> order_by_field_asc(const gstr& field); \
 	Ref<class> order_by_field_desc(const gstr& field);
 
-#define CLAUSE_LIMIT_HEADER(class)					\
-	Ref<class> limit_by(int count);					\
-	Ref<class> limit(int offset, int count);		\
+#define CLAUSE_LIMIT_HEADER(class)				\
+	Ref<class> limit_by(int count);				\
+	Ref<class> limit(int offset, int count);	\
 	Ref<class> page(int page, int page_size);
 
 #define CLAUSE_FROM_HEADER(class)														\
