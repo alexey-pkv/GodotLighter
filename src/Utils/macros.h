@@ -30,10 +30,10 @@
 	Ref<class> limit(int offset, int count);		\
 	Ref<class> page(int page, int page_size);
 
-#define CLAUSE_FROM_HEADER(class)									\
-	Ref<class> as(const gstr& alias);								\
-	Ref<class> from(const gstr& table);								\
-	Ref<class> from_scheme(const gstr& scheme, const gstr& table);
-
+#define CLAUSE_FROM_HEADER(class)														\
+	Ref<class> from(const gstr& table);													\
+	Ref<class> from_a(const gstr& table, const gstr& alias);							\
+	Ref<class> from_scheme(const gstr& scheme, const gstr& table);						\
+	Ref<class> from_scheme_a(const gstr& scheme, const gstr& table, const gstr& alias)
 
 #endif

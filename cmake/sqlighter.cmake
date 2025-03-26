@@ -1,10 +1,10 @@
 include(FetchContent)
 
 
-set(GODOTLIGHTER_SQLIGHTER_VERISON "v0.2.0")
+set(GODOTLIGHTER_SQLIGHTER_VERISON "v0.3.0")
 
 
-message(STATUS "Fetching SQLighter version ${GODOTLIGHTER_SQLIGHTER_VERISON}")
+message(STATUS "Fetching SQLighter ${GODOTLIGHTER_SQLIGHTER_VERISON}")
 
 FetchContent_Declare(
 	sqlighter

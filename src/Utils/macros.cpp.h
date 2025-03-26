@@ -2,23 +2,29 @@
 #define GODOTLIGHTER_MACROS_CPP_H
 
 
-#define CLAUSE_FROM_IMPL(class)														\
-	Ref<class> class::as(const gstr& alias)											\
-	{																				\
-		m_cmd->as(str2str(alias));													\
-		return { this };															\
-	}																				\
-																					\
-	Ref<class> class::from(const gstr& table)										\
-	{																				\
-		m_cmd->from(str2str(table));												\
-		return { this };															\
-	}																				\
-																					\
-	Ref<class> class::from_scheme(const gstr& scheme, const gstr& table)			\
-	{																				\
-		m_cmd->from(str2str(scheme), str2str(table));								\
-		return { this };															\
+#define CLAUSE_FROM_IMPL(class)																	\
+	Ref<class> class::from(const gstr& table)													\
+	{																							\
+		m_cmd->from(str2str(table));															\
+		return { this };																		\
+	}																							\
+																								\
+	Ref<class> class::from_a(const gstr& table, const gstr& alias)								\
+	{																							\
+		m_cmd->from(str2str(table), str2str(alias));											\
+		return { this };																		\
+	}																							\
+																								\
+	Ref<class> class::from_scheme(const gstr& scheme, const gstr& table)						\
+	{																							\
+		m_cmd->from_scheme(str2str(scheme), str2str(table));									\
+		return { this };																		\
+	}																							\
+																								\
+	Ref<class> class::from_scheme_a(const gstr& scheme, const gstr& table, const gstr& alias)	\
+	{																							\
+		m_cmd->from_scheme(str2str(scheme), str2str(table), str2str(alias));					\
+		return { this };																		\
 	}
 
 
