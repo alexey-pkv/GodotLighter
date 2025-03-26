@@ -16,7 +16,7 @@ An example project can be found here: [docs/Example.md](./docs/Example.md)
 
 - [ ] Add documentation / Tutorial
 - [ ] Ensure that any existing statements are finalized when the DB connection is closed
-- [ ] Add JOIN, JOIN LEFT and JOIN RIGHT to the select constructor
+- [x] Add JOIN, JOIN LEFT and JOIN RIGHT to the select constructor
 - [x] Add basic migration tools
 
 ### **v1.1.0**
