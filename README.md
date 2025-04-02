@@ -1,8 +1,3 @@
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-![GitHub Tag](https://img.shields.io/github/v/tag/alexey-pkv/GodotLighter?label=Version)
-[![](https://dcbadge.limes.pink/api/server/YTVeGYqCaC?style=flat)](https://discord.gg/YTVeGYqCaC)
-
-
 # GodotLighter 
 
 SQLite plugin for Godot. 
@@ -14,7 +9,7 @@ An example project can be found here: [docs/Example.md](./docs/Example.md)
 
 ### **v1.0.0**
 
-- [x] Add documentation / Tutorial
+- [ ] Add documentation / Tutorial
 - [ ] Ensure that any existing statements are finalized when the DB connection is closed
 - [x] Add JOIN, JOIN LEFT and JOIN RIGHT to the select constructor
 - [x] Add basic migration tools
@@ -33,6 +28,7 @@ An example project can be found here: [docs/Example.md](./docs/Example.md)
 # Guides
 
 * [Database Migrations](./docs/Guides/Migrations.md)
+* [Error Handling](./docs/Guides/ErrorHandling.md)
 
 
 # References 
@@ -43,7 +39,6 @@ An example project can be found here: [docs/Example.md](./docs/Example.md)
 * [SQLMigrationScript](./docs/Migration/SQLMigrationScript.md)
 
 
-### Error Handling
-* TODO: How the library handles errors.
+### Errors
 * [SQLErrorInfo](./docs/Objects/SQLErrorInfo.md)
 * [SQLErrors](./docs/Objects/SQLErrors.md)
