@@ -4,6 +4,15 @@
 
 `SQLDelete` is a class representing a SQL DELETE statement builder. It provides a fluent interface for constructing DELETE queries in a type-safe manner.
 
+## Available Clauses
+
+`SQLDelete` supports the following clauses that can be used for constructing a DELETE statement:
+
+- [From Clause](Clauses/FromClause.md) - Specify the table to delete from
+- [Where Clause](Clauses/WhereClause.md) - Add conditions to filter which rows to delete
+- [Order By Clause](Clauses/OrderByClause.md) - Specify the order in which rows are deleted
+- [Limit Clause](Clauses/LimitClause.md) - Limit the number of rows deleted
+
 ## Methods
 
 ### `del(): bool`
@@ -19,15 +28,6 @@ if sql_node.delete().from("player_quests").by_field("status", "completed").del()
 else:
     print("Failed to clear completed quests")
 ```
-
-## Available Clauses
-
-`SQLDelete` supports the following clauses that can be used for constructing a DELETE statement:
-
-- [From Clause](Clauses/FromClause.md) - Specify the table to delete from
-- [Where Clause](Clauses/WhereClause.md) - Add conditions to filter which rows to delete
-- [Order By Clause](Clauses/OrderByClause.md) - Specify the order in which rows are deleted
-- [Limit Clause](Clauses/LimitClause.md) - Limit the number of rows deleted
 
 ## Complete Example
 

@@ -4,6 +4,14 @@
 
 `SQLUpdate` is a class representing a SQL UPDATE statement builder. It provides a fluent interface for constructing UPDATE queries in a type-safe manner.
 
+## Available Clauses
+
+`SQLUpdate` supports the following clauses that can be used for constructing an `UPDATE` statement:
+
+- [Or Clause](Clauses/OrClause.md) - Specify conflict resolution behavior
+- [Set Clause](Clauses/SetClause.md) - Specify columns and values to update
+- [Where Clause](Clauses/WhereClause.md) - Add conditions to filter which rows to update
+
 ## Methods
 
 ### `update(): bool`
@@ -63,14 +71,6 @@ sql_node.update().table_in("save_data", "player_stats")
 ```gdscript
 sql_node.update().table("inventory_items").as("inv")
 ```
-
-## Available Clauses
-
-`SQLUpdate` supports the following clauses that can be used for constructing an UPDATE statement:
-
-- [Or Clause](Clauses/OrClause.md) - Specify conflict resolution behavior
-- [Set Clause](Clauses/SetClause.md) - Specify columns and values to update
-- [Where Clause](Clauses/WhereClause.md) - Add conditions to filter which rows to update
 
 ## Complete Example
 

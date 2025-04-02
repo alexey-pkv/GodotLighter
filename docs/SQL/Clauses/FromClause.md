@@ -8,7 +8,6 @@ The From Clause is available in the following SQL command builders:
 
 - [SQLSelect](../SQLSelect.md)
 - [SQLDelete](../SQLDelete.md)
-- [SQLUpdate](../SQLUpdate.md)
 
 ## Methods
 

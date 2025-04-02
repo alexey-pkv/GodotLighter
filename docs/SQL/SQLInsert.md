@@ -2,7 +2,15 @@
 
 **Extends:** [SQLCommand](SQLCommand.md)
 
-`SQLInsert` is a class representing a SQL INSERT statement builder. It provides a fluent interface for constructing INSERT queries in a type-safe manner.
+`SQLInsert` is a class representing a SQL `INSERT` statement builder. It provides a fluent interface for constructing `INSERT` queries in a type-safe manner.
+
+## Available Clauses
+
+`SQLInsert` supports the following clauses that can be used for constructing an `INSERT` statement:
+
+- [Or Clause](Clauses/OrClause.md) - Specify conflict resolution behavior
+- [Set Clause](Clauses/SetClause.md) - Used with ON CONFLICT to specify updates for existing rows
+
 
 ## Methods
 
@@ -182,13 +190,6 @@ sql_node.insert()
     .set("score", new_score)   # Update only the score if conflict occurs
     .set("completion_time", completion_time)
 ```
-
-## Available Clauses
-
-`SQLInsert` supports the following clauses that can be used for constructing an INSERT statement:
-
-- [Or Clause](Clauses/OrClause.md) - Specify conflict resolution behavior
-- [Set Clause](Clauses/SetClause.md) - Used with ON CONFLICT to specify updates for existing rows
 
 ## Complete Example
 
