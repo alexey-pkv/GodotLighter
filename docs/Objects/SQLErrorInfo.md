@@ -1,42 +1,56 @@
 # SQLErrorInfo
 
-The SQLErrorInfo object acts as a wrapper for errors, enabling users to access detailed information about errors that occur within the GodotLite library.
+The SQLErrorInfo object provides detailed information about errors that occur within the GodotLighter library. It acts as a wrapper for capturing and examining SQL-related error details.
 
 ## Methods
 
 ### `code(): int`
-**Description**: Returns the error code associated with the SQL error.  
+**Description**: Returns the unique error code associated with the SQL error.  
 
-> This error code is specific to the **SQLighter** library and not SQLite3. To retrieve the SQLite3 error code, use err_sqlite_code()  
+> This error code is specific to the **SQLighter** library and differs from the SQLite error code. To retrieve the SQLite-specific error code, use `err_sqlite_code()`.  
+
+**Return**: An integer representing the SQLighter library's error code.
 
 ---
 
 ### `error(): String`
-**Description**: This is the full error message, providing detailed information about the error. 
+**Description**: Provides a comprehensive error message describing the specific error that occurred. 
+
+**Return**: A string containing the full error description.
 
 ---
 
 ### `err_additional_message(): String`
-**Description**: Sometimes, additional information about an error may be available depending on the scope of the operation where the error occurred. When such a message is available, it can be retrieved using this method.
+**Description**: Retrieves additional contextual information about the error when available. 
 
-> This value is also appended to the output of error() string.
+> This supplementary message provides extra details that can help diagnose the underlying issue.
+
+**Return**: A string with supplementary error information.
 
 ---
 
 ### `err_sqlite_code(): int`
-**Description**: Get the SQLite-specific error code.
+**Description**: Returns the SQLite-specific error code associated with the error.
+
+**Return**: An integer representing the precise SQLite error code.
 
 ---
 
 ### `err_sqlite_str(): String`
-**Description**: Get the SQLite error message associated with the SQLite error code.
+**Description**: Retrieves the raw error message directly from SQLite.
+
+**Return**: A string containing the SQLite error message.
 
 ---
 
 ### `err_lighter_str(): String`
-**Description**: Get a human-readable error message for the **SQLighter**-specific error code. 
+**Description**: Returns a human-readable error message specific to the SQLighter library's error code.
+
+**Return**: A user-friendly description of the error.
 
 ---
 
 ### `err_query(): String`
-**Description**: Retrieve the SQL query string related to the error, if available.
+**Description**: Retrieves the SQL query string associated with the error, if available.
+
+**Return**: The SQL query that triggered the error, or an empty string if no query was associated.

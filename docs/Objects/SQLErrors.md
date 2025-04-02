@@ -25,6 +25,16 @@ By default, all `SQLErrors` objects associated with an `SQLNode` have this prope
 
 **Return**: An [SQLErrorInfo](SQLErrorInfo.md) object, or null if no error occurred or if `reset_error()` was called. 
 
+---
+
+### `reset_error(): void`
+**Description**: Clears the current error, removing the last recorded error from the object.
+
+**Example**:
+```gdscript
+# Clear any previous error 
+sql_errors.reset_error()
+```
 
 ## Signals
 
@@ -32,4 +42,3 @@ By default, all `SQLErrors` objects associated with an `SQLNode` have this prope
 **Description**: This signal is emitted whenever an error occurs within the associated SQLNode or its context. The signal carries an [SQLErrorInfo](SQLErrorInfo.md) object, which provides details about the error.
 
 > The signal is called after the value of `last_err` is updated
-
