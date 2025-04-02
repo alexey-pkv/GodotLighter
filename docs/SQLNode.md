@@ -4,9 +4,9 @@
 
 This is the primary interface for interacting with the library. `SQLNode` represents a single connection to an SQLite database.
 
-To connect to an existing database or create a new one, attach a new `SQLNode` to your scene tree. The connection is established either when the first command is executed or when the `open()` method is explicitly called.  If the specified database does not exist, the node will attempt to create it.
+To connect to an existing database or create a new one, attach a new `SQLNode` to your scene tree. The connection is established either when the first command is executed or when the `open()` method is explicitly called. If the specified database does not exist, the node will attempt to create it.
 
-> When the node is deleted, if a connection is still open, it will be closed and safely disposed of (hopfully).
+> When the node is deleted, if a connection is still open, it will be closed and safely disposed of (hopefully).
 
 
 ## Properties
@@ -14,9 +14,9 @@ To connect to an existing database or create a new one, attach a new `SQLNode` t
 ### `db_path: String`
 
 Specifies the path to the database instance. It can be:
-* A full path.
-* A relative path using `user://...` or `res://...`.
-* `:memory:` for an in-memory database.
+* A full path
+* A relative path using `user://...` or `res://...`
+* `:memory:` for an in-memory database
 
 If modified after the connection is opened, the change will not take effect until the connection is closed and reopened.
 
@@ -128,7 +128,7 @@ This container stores the most recent error that occurred within the context of 
 
 ### `query_row(query: String, binds: Array): Dictionary`  
 
-| Parameter  | Type    | Description                                         |
+| Parameter  | Type   | Description                                          |
 |------------|--------|------------------------------------------------------|
 | `query`    | String | The SQL query to be executed.                        |
 | `binds`    | Array  | An array of values to bind to the query parameters.  |
@@ -152,7 +152,7 @@ will output
 
 ### `query_row_numeric(query: String, binds: Array): Array`
 
-| Parameter  | Type    | Description                                        |
+| Parameter  | Type   | Description                                         |
 |------------|--------|-----------------------------------------------------|
 | `query`    | String | The SQL query to be executed.                       |
 | `binds`    | Array  | An array of values to bind to the query parameters. |
@@ -248,8 +248,8 @@ will output
 | `binds`    | Array  | An array of values to bind to the query parameters.     |
 | `failsafe` | int    | The highest number of records expected to be retrieved. |
 
-**Description**: The behaciour of this method is exactly the same as `query_all`, but you can overide the 
-failsafe value. If more than `failsafe` records are selecteds the query will raise an error and return an empty set.
+**Description**: The behaviour of this method is exactly the same as `query_all`, but you can override the 
+failsafe value. If more than `failsafe` records are selected the query will raise an error and return an empty set.
 
 --- 
 
@@ -285,37 +285,51 @@ will output
 --- 
 
 ### `direct()`
-TODO: 
+**Description**: Creates a direct SQL query builder for executing raw SQL statements with parameter binding.
 
---- 
+**Return**: A [SQLDirect](SQL/SQLDirect.md) object for constructing and executing direct SQL queries.
+
+---
 
 ### `select()`
-TODO: 
+**Description**: Creates a `SELECT` query builder for retrieving data from the database.
 
---- 
+**Return**: A [SQLSelect](SQL/SQLSelect.md) object for constructing complex SELECT queries.
+
+---
 
 ### `insert()`
-TODO: 
+**Description**: Creates an INSERT query builder for adding new records to a database table.
 
---- 
+**Return**: A [SQLInsert](SQL/SQLInsert.md) object for constructing INSERT statements.
+
+---
 
 ### `update()`
-TODO: 
+**Description**: Creates an UPDATE query builder for modifying existing records in a database table.
 
---- 
+**Return**: A [SQLUpdate](SQL/SQLUpdate.md) object for constructing UPDATE statements.
+
+---
 
 ### `delete()`
-TODO: 
+**Description**: Creates a DELETE query builder for removing records from a database table.
 
---- 
+**Return**: A [SQLDelete](SQL/SQLDelete.md) object for constructing DELETE statements.
+
+---
 
 ### `create_table()`
-TODO: 
+**Description**: Creates a table builder for defining and creating new database tables.
 
---- 
+**Return**: A [SQLCreateTable](SQL/SQLCreateTable.md) object for constructing CREATE TABLE statements.
+
+---
 
 ### `drop()`
-TODO: 
+**Description**: Creates a DROP query builder for removing database objects like tables, views, or indexes.
+
+**Return**: A [SQLDrop](SQL/SQLDrop.md) object for constructing DROP statements.
 
 ## Signals
 
