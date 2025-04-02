@@ -2,9 +2,6 @@
 #define GODOTLIGHTER_HELPERS_H
 
 
-
-
-
 namespace godot
 {
 	class Node;

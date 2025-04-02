@@ -1,7 +1,6 @@
 #include "SQLDirect.h"
 
 
-#include "GLighter.h"
 #include "Utils/types.h"
 
 
